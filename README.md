@@ -4,7 +4,7 @@
 L'objectif de ce projet est de réaliser du web scraping sur plusieurs sites afin de créer une base de données sur les prix de différents produits. Ensuite, le projet se propose de traiter ces données et de visualiser les résultats à travers une interface graphique.
 ## Diagramme des Classes
 
-![Diagramme UML](https://github.com/Sjats/ProjetTraitementdeDonnees2024/blob/main/diagramme_uml/uml/uml.png)
+![Diagramme UML](https://github.com/Sjats/ProjetTraitementdeDonnees2024/blob/main/diagramme_uml/uml.png)
 
 ## Mise en Place
 Pour installer les bibliothèques nécessaires à l'exécution, veuillez saisir la commande suivante dans votre terminal :
