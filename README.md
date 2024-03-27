@@ -8,7 +8,7 @@ L'objectif de ce projet est de réaliser du web scraping sur plusieurs sites afi
 
 ## Diagramme des Cas d'Utilisation
 
-![Diagramme UML](https://github.com/Sjats/ProjetTraitementdeDonnees2024/blob/main/diagramme_uml/cas_utilisation.pdf)
+![Diagramme Cas d'Utilisation](https://github.com/Sjats/ProjetTraitementdeDonnees2024/blob/main/diagramme_uml/cas_utilisation.pdf)
 
 ## Mise en Place
 Pour installer les bibliothèques nécessaires à l'exécution, veuillez saisir la commande suivante dans votre terminal :
