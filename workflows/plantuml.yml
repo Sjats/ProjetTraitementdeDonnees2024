@@ -15,7 +15,7 @@ jobs:
         java-version: '11'
     - name: Generate PlantUML Diagrams
       run: |
-        java -jar /path/to/plantuml.jar -tsvg README.md
+        java -jar /diagramme_uml/uml.jar -tsvg README.md
     - name: Commit and Push Changes
       run: |
         git config --local user.email "action@github.com"
