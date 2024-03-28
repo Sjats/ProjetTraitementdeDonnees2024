@@ -22,7 +22,7 @@ class Article {
     # nom: str
     # prix: float
     # id_article: str
-    # Pays : str
+    # pays : str
 }
 
 class Produit {
@@ -44,7 +44,7 @@ class Pays {
     + IndcicesProduits : dict[str, float]
     + IndcicesCategorieProduit : dict[str, float]
     # ConversionEuros() : float
-    - GetTauxdeChange(devise: str) : float
+    - ObtientTauxChange(devise: str) : float
 }
 
 "Site Web" --* Article
