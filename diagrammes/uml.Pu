@@ -11,7 +11,7 @@ skinparam class {
     BorderColor black
 }
 
-class "Site Web" {
+class "SiteWeb" {
     # nom : str
     - url_recherche : list<str>
     + <<Create>> __init__(nom : str, url_recherche : list<str>)
@@ -21,7 +21,7 @@ class "Site Web" {
     
 }
 
-class "Interface Utilisateur" {
+class "InterfaceUtilisateur" {
     - indcices_produits : dict[str, float]
     - indcices_categorie_produit : dict[str, float]
     + <<Create>> __init__()
@@ -48,7 +48,7 @@ class Produit {
     + EnregistrementIndices()
 }
 
-class "Catégorie Produit" {
+class "CategorieProduit" {
     # nom : str
     # produits : dict[str, Produit]
     + <<Create>> __init__(nom : str, produits : dict[str, Produit])
@@ -67,10 +67,10 @@ class Prix {
 }
 
 
-"Site Web" o-- Article
+"SiteWeb" o-- Article
 Article --o Produit
-Produit --o "Catégorie Produit"
+Produit --o "CategorieProduit"
 
-"Catégorie Produit" -- "Interface Utilisateur" : fourni données >
-Produit -- "Interface Utilisateur" : fourni données >
+"CategorieProduit" -- "InterfaceUtilisateur" : fourni données >
+Produit -- "InterfaceUtilisateur" : fourni données >
 @enduml
