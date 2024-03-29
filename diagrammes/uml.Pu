@@ -12,11 +12,11 @@ skinparam class {
 }
 
 class "Site Web" {
-    # nom: str
+    # nom : str
     - url_recherche : list<str>
     + <<Create>> __init__(nom : str, url_recherche : list<str>)
-    - WebScrapping(nom_article: str): list<Article>
-    # EnregistrementHtml()
+    - WebScrapping(nom_article : str) : list<Article>
+    + EnregistrementHtml()
     
     
 }
@@ -32,35 +32,35 @@ class "Interface Utilisateur" {
 }
 
 class Article {
-    # id_article: str
-    # prix: Prix
+    # id_article : str
+    # prix : Prix
     # pays : str
-    + <<Create>> __init__(id_article: str, prix: Prix, pays : str)
+    + <<Create>> __init__(id_article : str, prix : Prix, pays : str)
 }
 
 class Produit {
-    # nom: str
-    # articles: dict[str, Article]
-    + <<Create>> __init__(nom: str, articles : dict[tr, Article])
+    # nom : str
+    # articles : dict[str, Article]
+    + <<Create>> __init__(nom : str, articles : dict[tr, Article])
     # CalculIndicesProduit() : dict[str, float]
-    + AjouteDonneesExterieures(dict[str, Article]) 
-    - EnregistrementProduit()
-    - EnregistrementIndices()
+    + AjouteDonneesExterieures(articles_ext : dict[str, Article]) 
+    + EnregistrementProduit()
+    + EnregistrementIndices()
 }
 
 class "Catégorie Produit" {
-    # nom: str
-    # produits: dict[str, Produit]
-    + <<Create>> __init__(nom: str, produits: dict[str, Produit])
+    # nom : str
+    # produits : dict[str, Produit]
+    + <<Create>> __init__(nom : str, produits : dict[str, Produit])
     # CalculIndicesCategorie() : dict[str, float]
-    - EnregistrementCategorieProduit()
-    - EnregistrementIndices()
+    + EnregistrementCategorieProduit()
+    + EnregistrementIndices()
 }
 
 class Prix {
     + devise : str
     + montant : float
-    + <<Create>> __init__(devise : str, montant: float)
+    + <<Create>> __init__(devise : str, montant : float)
     # ConversionEuros() : float
     - ObtientTauxChange() : float
 
