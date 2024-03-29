@@ -1,5 +1,4 @@
 @startuml
-
 skinparam class {
     BackgroundColor LightGoldenRodYellow
     BorderColor black
@@ -8,50 +7,63 @@ skinparam class {
 class "Site Web" {
     # nom: str
     - url_recherche : list<str>
+    + <<Create>> __init__(nom : str, url_recherche : list<str>)
     - WebScrapping(nom_article: str): list<Article>
+    # EnregistrementHtml()
+    
+    
 }
 
 class "Interface Utilisateur" {
-    + requete
+    - indcices_produits : dict[str, float]
+    - indcices_categorie_produit : dict[str, float]
+    + <<Create>> __init__()
     - AfficherCarte()
     - AfficherHistogramme()
-    - AfficherGraphique()
+    - ChargerNouveauxIndices()
+    - __main__()
 }
 
 class Article {
-    # nom: str
-    # prix: float
     # id_article: str
+    # prix: Prix
     # pays : str
+    + <<Create>> __init__(id_article: str, prix: Prix, pays : str)
 }
 
 class Produit {
     # nom: str
-    # articles: dict{str, article}
-    # CalculIndicesProduit() : float
-    + AjouteDonneesExterieures(Dict[str, Article]) 
+    # articles: dict{str, Article}
+    + <<Create>> __init__(nom: str, articles : dict{str, Article})
+    # CalculIndicesProduit() : dict[str, float]
+    + AjouteDonneesExterieures(dict[str, Article]) 
+    - EnregistrementProduit()
+    - EnregistrementIndices()
 }
 
 class "Catégorie Produit" {
     # nom: str
     # produits: dict[str, Produit]
-    # CalculIndicesCategorie() : float
+    + <<Create>> __init__(nom: str, produits: dict[str, Produit])
+    # CalculIndicesCategorie() : dict[str, float]
+    - EnregistrementCategorieProduit()
+    - EnregistrementIndices()
 }
 
-class Pays {
-    + nom : str
+class Prix {
     + devise : str
-    + IndcicesProduits : dict[str, float]
-    + IndcicesCategorieProduit : dict[str, float]
+    + montant : float
+    + <<Create>> __init__(devise : str, montant: float)
     # ConversionEuros() : float
-    - ObtientTauxChange(devise: str) : float
+    - ObtientTauxChange() : float
+
 }
 
-"Site Web" --* Article
-Article --* Produit
-Produit --* "Catégorie Produit"
 
-Pays -- "Interface Utilisateur"
-Pays-- "Catégorie Produit"
-Pays -- Produit
+"Site Web" o-- Article
+Article --o Produit
+Produit --o "Catégorie Produit"
+
+"Catégorie Produit" -- "Interface Utilisateur" : fourni données >
+Produit -- "Interface Utilisateur" : fourni données >
 @enduml
