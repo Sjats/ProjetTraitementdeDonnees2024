@@ -2,6 +2,8 @@ from article import Article
 import requests
 import os
 import pickle
+from prix import Prix
+from ..fonctions import DomaineDevise
 
 
 class SiteWeb:
@@ -75,8 +77,11 @@ class SiteWeb:
                           "0"*(4 - auxi) + str(num))
             prix = self.recherche_prix(html)
             pays = payss[num]
+            devise = DomaineDevise(pays)
             self.__database_html[id_article] = html
-            self.__database[id_article] = Article(id_article, prix, pays)
+            self.__database[id_article] = Article(id_article,
+                                                  Prix(prix, devise),
+                                                  pays)
 
     def recherche_prix(self, html):
 
