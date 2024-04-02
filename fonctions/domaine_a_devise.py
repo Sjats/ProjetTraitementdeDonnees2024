@@ -237,5 +237,5 @@ domaine_a_devise = {
 
 
 def DomaineDevise(domain):
-    domain = domain.lower()
+    domain = domain.lower()[-3:]
     return domaine_a_devise[domain]

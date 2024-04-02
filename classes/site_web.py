@@ -3,35 +3,22 @@ import requests
 import os
 import pickle
 from prix import Prix
-from ..fonctions import DomaineDevise
+from ..fonctions import domaine_a_devise
+from ..fonctions import domaine_a_pays
+from ..donnees import renseigement_sites_web
 
 
 class SiteWeb:
-    def __init__(self, nom, **fonctionalites_recherche):
+    def __init__(self, nom):
+
         self._nom = nom
 
-        self.__url_recherche = fonctionalites_recherche.get(
-                                        "url_recherche", None)
+        # Get the corresponding dictionary from site_configs based on nom
+        config_dict = renseigement_sites_web.configurations_sites.get(nom, {})
 
-        self.__pays = fonctionalites_recherche.get(
-                                        "pays", None)
-
-        self.__devant_prix = fonctionalites_recherche.get(
-                                        "devant_prix", None)
-
-        self.__devant_url_article = fonctionalites_recherche.get(
-                                        "url_article", None)
-
-        self.__apres_url_article = fonctionalites_recherche.get(
-                                        "apres_url_article", None)
-
-        self.__adresse_fichier = fonctionalites_recherche.get(
-                                        "adresse_fichier", "donnees/")
-
-        self.__requete_top_5 = fonctionalites_recherche.get(
-                                        "requete_top_5", None)
-        self.__requete_pays_ref = fonctionalites_recherche.get(
-                                        "requete_pays_ref", None)
+        # Set attributes using setattr
+        for key, value in config_dict.items():
+            setattr(self, f"__{key}", value)
 
         self.__entete = {
                 'dnt': '1',
@@ -48,6 +35,7 @@ class SiteWeb:
                 'sec-fetch-dest': 'document',
                 'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
         }
+        self.__adresse_fichier = "donnees/"
 
     def recherche_articles(self):
         """
@@ -77,7 +65,7 @@ class SiteWeb:
                           "0"*(4 - auxi) + str(num))
             prix = self.recherche_prix(html)
             pays = payss[num]
-            devise = DomaineDevise(pays)
+            devise = domaine_a_devise.DomaineDevise(pays)
             self.__database_html[id_article] = html
             self.__database[id_article] = Article(id_article,
                                                   Prix(prix, devise),
@@ -95,7 +83,7 @@ class SiteWeb:
             else:
                 break
 
-        self.__prix = self.html[PrixPosition: PrixPosition + auxi]
+        return self.html[PrixPosition: PrixPosition + auxi]
 
     def recherche_url_articles(self):
 
