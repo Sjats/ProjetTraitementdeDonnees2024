@@ -78,8 +78,8 @@ window.mainloop()
 
 
 
-    def ChargerNouveauxIndices():
-        return 'yo'
+def ChargerNouveauxIndices():
+    return 'yo'
 
 x = InterfaceUtilisateur()
 x.AfficherCarte()

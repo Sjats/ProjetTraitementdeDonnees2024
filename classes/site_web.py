@@ -125,6 +125,7 @@ class SiteWeb:
     def WebScrapping(self):
         self.recherche_url_articles()
         self.recherche_articles()
+        self.EnregistrementHtml()
 
     def EnregistrementHtml(self):
 
