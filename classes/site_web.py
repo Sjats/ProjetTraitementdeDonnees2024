@@ -1,13 +1,24 @@
 from article import Article
 import requests
+import os
+import pickle
 
 
 class SiteWeb:
-    def __init__(self, nom, fonctionalites_recherche):
+    def __init__(self, nom, **fonctionalites_recherche):
         self._nom = nom
-        self.__url_recherche = fonctionalites_recherche["url_recherche"]
-        self.__devant_prix = fonctionalites_recherche["devant_prix"]
-        self.__url_choix_article = fonctionalites_recherche["choix_article"]
+        self.__url_recherche = fonctionalites_recherche.get(
+                                        "url_recherche", None)
+
+        self.__devant_prix = fonctionalites_recherche.get(
+                                        "devant_prix", None)
+
+        self.__devant_url_article = fonctionalites_recherche.get(
+                                        "url_article", None)
+
+        self.__adresse_fichier = fonctionalites_recherche.get(
+                                        "adresse_fichier", "donnees/")
+
         self.__entete = {
                 'dnt': '1',
                 'upgrade-insecure-requests': '1',
@@ -31,19 +42,57 @@ class SiteWeb:
         interne
         """
 
-        self.__html = []
+        htmls = []
+        payss = []
 
-        for url_articles in self.__urls_articles:
+        for url_articles, pays in self.__urls_articles:
             resultat_recherche = requests.get(url_articles,
                                               headers=self.__entete)
+            payss.append(pays)
 
             resultat_recherche.raise_for_status()
 
-            self.__html.append(resultat_recherche.text)
+            self.htmls.append(resultat_recherche.text)
 
-    def recherche_prix(self):
+        if not os.path.exists(self.__adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database = {}
+            database["ListeProduits"] = []
 
-        PrixPosition = (self.html.find(self.__devant_prix)
+        else:
+            # Ouvre la BDD
+            with open(self.__adresse_fichier + "database.pkl", "rb") as file:
+                database = pickle.load(file)
+
+        if not os.path.exists(self.__adresse_fichier + "database_html.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_html = {}
+
+        else:
+            # On ouvre la BDD
+            with open(self.__adresse_fichier +
+                      "database_html.pkl", "rb") as file:
+
+                database_html = pickle.load(file)
+
+        for num, html in enumerate(htmls):
+            auxi = len(str(num))
+            id_article = (str(self._nom) + "-" +
+                          "0"*(4 - auxi) + str(num))
+            prix = self.recherche_prix(html)
+            pays = payss[num]
+            database_html[id_article] = html
+            database[id_article] = Article(id_article, prix, pays)
+
+        with open(self.__adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database, file)
+
+        with open(self.__adresse_fichier + "database_html.pkl", "wb") as file:
+            pickle.dump(database_html, file)
+
+    def recherche_prix(self, html):
+
+        PrixPosition = (html.find(self.__devant_prix)
                         + len(self.__devant_prix))
         auxi = 0
         for position in range(0, 15):
@@ -54,4 +103,24 @@ class SiteWeb:
                 break
 
         self.__prix = self.html[PrixPosition: PrixPosition + auxi]
-        
+
+    def recherche_url_articles(self):
+        for url_articles, pays in self.__urls_articles:
+
+    def recherche_articles1(self):
+        for ASIN in self.ASINS:
+            for pays in self.pays:
+                url = " https://www.amazon." + pays + "/s?k=" + ASIN
+                resultataux = requests.get(url, headers=self.entete).text
+
+                beforelink = "<a class=\"a-link-normal s-no-outline\" href=\""
+                posbeforelink = resultataux.find(beforelink) + len(beforelink)
+
+                afterlink = ("<div class=\"a-section aok-relative "
+                             "s-image-square-aspect\"><img "
+                             "class=\"s-image\" src=")
+
+                posafterlink = resultataux.find(afterlink) - 2
+
+                url = ("https://www.amazon." + pays +
+                       resultataux[posbeforelink: posafterlink])
