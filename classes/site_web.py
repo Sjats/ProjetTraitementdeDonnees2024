@@ -7,8 +7,12 @@ import pickle
 class SiteWeb:
     def __init__(self, nom, **fonctionalites_recherche):
         self._nom = nom
+
         self.__url_recherche = fonctionalites_recherche.get(
                                         "url_recherche", None)
+
+        self.__pays = fonctionalites_recherche.get(
+                                        "pays", None)
 
         self.__devant_prix = fonctionalites_recherche.get(
                                         "devant_prix", None)
@@ -16,8 +20,16 @@ class SiteWeb:
         self.__devant_url_article = fonctionalites_recherche.get(
                                         "url_article", None)
 
+        self.__apres_url_article = fonctionalites_recherche.get(
+                                        "apres_url_article", None)
+
         self.__adresse_fichier = fonctionalites_recherche.get(
                                         "adresse_fichier", "donnees/")
+
+        self.__requete_top_5 = fonctionalites_recherche.get(
+                                        "requete_top_5", None)
+        self.__requete_pays_ref = fonctionalites_recherche.get(
+                                        "requete_pays_ref", None)
 
         self.__entete = {
                 'dnt': '1',
@@ -35,9 +47,9 @@ class SiteWeb:
                 'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
         }
 
-    def recherche_code_html_page_article(self):
+    def recherche_articles(self):
         """
-        Fait la rêquete de recherche des n-premieres pages de produits
+        Fait la rêquete de recherche des 5 premieres pages de produits
         return: le code source html de ces n-premiers sites daans une variable
         interne
         """
@@ -54,26 +66,8 @@ class SiteWeb:
 
             self.htmls.append(resultat_recherche.text)
 
-        if not os.path.exists(self.__adresse_fichier + "database.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database = {}
-            database["ListeProduits"] = []
-
-        else:
-            # Ouvre la BDD
-            with open(self.__adresse_fichier + "database.pkl", "rb") as file:
-                database = pickle.load(file)
-
-        if not os.path.exists(self.__adresse_fichier + "database_html.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database_html = {}
-
-        else:
-            # On ouvre la BDD
-            with open(self.__adresse_fichier +
-                      "database_html.pkl", "rb") as file:
-
-                database_html = pickle.load(file)
+        self.__database = {}
+        self.__database_html = {}
 
         for num, html in enumerate(htmls):
             auxi = len(str(num))
@@ -81,14 +75,8 @@ class SiteWeb:
                           "0"*(4 - auxi) + str(num))
             prix = self.recherche_prix(html)
             pays = payss[num]
-            database_html[id_article] = html
-            database[id_article] = Article(id_article, prix, pays)
-
-        with open(self.__adresse_fichier + "database.pkl", "wb") as file:
-            pickle.dump(database, file)
-
-        with open(self.__adresse_fichier + "database_html.pkl", "wb") as file:
-            pickle.dump(database_html, file)
+            self.__database_html[id_article] = html
+            self.__database[id_article] = Article(id_article, prix, pays)
 
     def recherche_prix(self, html):
 
@@ -105,22 +93,66 @@ class SiteWeb:
         self.__prix = self.html[PrixPosition: PrixPosition + auxi]
 
     def recherche_url_articles(self):
-        for url_articles, pays in self.__urls_articles:
 
-    def recherche_articles1(self):
-        for ASIN in self.ASINS:
-            for pays in self.pays:
-                url = " https://www.amazon." + pays + "/s?k=" + ASIN
-                resultataux = requests.get(url, headers=self.entete).text
+        if self.__requete_top_5 is not None:
+            for pays in self.__pays:
 
-                beforelink = "<a class=\"a-link-normal s-no-outline\" href=\""
-                posbeforelink = resultataux.find(beforelink) + len(beforelink)
+                url = (self.__url_recherche[0] + pays + self.__url_recherche[1]
+                       + self.__requete_top_5)
 
-                afterlink = ("<div class=\"a-section aok-relative "
-                             "s-image-square-aspect\"><img "
-                             "class=\"s-image\" src=")
+                html_recherche = requests.get(url, headers=self.entete).text
 
-                posafterlink = resultataux.find(afterlink) - 2
+                pos_avant_link = 0
+                for num_article in range(5):
+                    pos_avant_link = (
+                        html_recherche.find(
+                            (self.__devant_url_article) +
+                            len(self.__devant_url_article),
+                            pos_avant_link + 1
+                            ))
 
-                url = ("https://www.amazon." + pays +
-                       resultataux[posbeforelink: posafterlink])
+                    pos_apres_link = html_recherche.find(
+                                    self.__apres_url_article) - 2
+
+                    url = (self.__url_recherche[0] + pays +
+                           html_recherche[pos_avant_link: pos_apres_link])
+
+                    self.__urls_articles.append(url, pays)
+
+        if self.__requete_pays_ref is not None:
+            pass
+
+    def WebScrapping(self):
+        self.recherche_url_articles()
+        self.recherche_articles()
+
+    def EnregistrementHtml(self):
+
+        if not os.path.exists(self.__adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_fichier = {}
+
+        else:
+            # Ouvre la BDD
+            with open(self.__adresse_fichier + "database.pkl", "rb") as file:
+                database_fichier = pickle.load(file)
+
+        if not os.path.exists(self.__adresse_fichier + "database_html.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_html_fichier = {}
+
+        else:
+            # On ouvre la BDD
+            with open(self.__adresse_fichier +
+                      "database_html.pkl", "rb") as file:
+
+                database_html_fichier = pickle.load(file)
+
+        database_fichier.update(self.__database)
+        database_html_fichier.update(self.__database_html)
+
+        with open(self.__adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database_fichier, file)
+
+        with open(self.__adresse_fichier + "database_html.pkl", "wb") as file:
+            pickle.dump(database_html_fichier, file)
