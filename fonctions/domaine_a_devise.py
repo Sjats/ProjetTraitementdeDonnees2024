@@ -237,5 +237,7 @@ domaine_a_devise = {
 
 
 def DomaineDevise(domain):
+    if domain[-4:] == ".com":
+        return "USD"
     domain = domain.lower()[-3:]
     return domaine_a_devise[domain]

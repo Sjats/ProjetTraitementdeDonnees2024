@@ -1,11 +1,20 @@
-from article import Article
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+from .article import Article
 import requests
 import os
 import pickle
-from prix import Prix
-from ..fonctions.domaine_a_devise import DomaineDevise
-from ..fonctions import domaine_a_pays
-from ..donnees import renseigement_sites_web
+from .prix import Prix
+from fonctions.domaine_a_devise import DomaineDevise
+from fonctions import domaine_a_pays
+from donnees import renseigement_sites_web
+from fonctions import domaine_a_langue
+from googletrans import Translator
 
 
 class SiteWeb:
@@ -18,7 +27,7 @@ class SiteWeb:
 
         # Set attributes using setattr
         for key, value in config_dict.items():
-            setattr(self, f"__{key}", value)
+            setattr(self, key, value)
 
         self.__entete = {
                 'dnt': '1',
@@ -46,13 +55,14 @@ class SiteWeb:
 
         htmls = []
 
-        for url_articles, domaine in self.__urls_articles:
+        for url_articles, domaine in self.urls_articles:
+            print(url_articles)
             resultat_recherche = requests.get(url_articles,
                                               headers=self.__entete)
 
             resultat_recherche.raise_for_status()
 
-            self.htmls.append((resultat_recherche.text, domaine))
+            htmls.append((resultat_recherche.text, domaine))
 
         self.__database = {}
         self.__database_html = {}
@@ -85,34 +95,41 @@ class SiteWeb:
         return self.html[PrixPosition: PrixPosition + auxi]
 
     def recherche_url_articles(self):
+        self.urls_articles = []
+        if hasattr(self, 'requete_top_5'):
+            print(self.requete_top_5)
+            for requete in self.requete_top_5:
+                for domaine in self.pays_domaines:
+                    translator = Translator()
+                    langue = domaine_a_langue.DomaineLangue(domaine)
+                    requte_trad = translator.translate(requete, dest=langue).text
 
-        if self.__requete_top_5 is not None:
-            for domaine in self.pays_domaines:
+                    url = (self.url_recherche[0] + domaine +
+                           self.url_recherche[1] + requte_trad)
 
-                url = (self.__url_recherche[0] + domaine +
-                       self.__url_recherche[1] + self.__requete_top_5)
+                    html_recherche = requests.get(url,
+                                                  headers=self.__entete).text
 
-                html_recherche = requests.get(url, headers=self.entete).text
+                    pos_avant_link = 0
+                    for num_article in range(5):
+                        pos_avant_link = (
+                            html_recherche.find(
+                                (self.devant_url_article),
+                                len(self.devant_url_article) +
+                                pos_avant_link + 1
+                                ))
 
-                pos_avant_link = 0
-                for num_article in range(5):
-                    pos_avant_link = (
-                        html_recherche.find(
-                            (self.__devant_url_article) +
-                            len(self.__devant_url_article),
-                            pos_avant_link + 1
-                            ))
+                        pos_apres_link = html_recherche.find(
+                                        self.apres_url_article) - 2
 
-                    pos_apres_link = html_recherche.find(
-                                    self.__apres_url_article) - 2
+                        url = (self.url_recherche[0] + domaine +
+                               html_recherche[pos_avant_link: pos_apres_link])
 
-                    url = (self.__url_recherche[0] + domaine +
-                           html_recherche[pos_avant_link: pos_apres_link])
+                        self.urls_articles.append((url, domaine))
+        print(self.urls_articles)
 
-                    self.__urls_articles.append((url, domaine))
-
-        if self.__requete_pays_ref is not None:
-            pass
+        #if self.requete_pays_ref is not None:
+        #    pass
 
     def WebScrapping(self):
         self.recherche_url_articles()

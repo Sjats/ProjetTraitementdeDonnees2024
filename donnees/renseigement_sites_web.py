@@ -1,4 +1,4 @@
-requete_top_5 = ["requete1", "requete2"]
+requete_top_5 = ["rice", "sugar"]
 requete_pays_ref = ["requete1", "requete2"]
 
 configurations_sites = {
@@ -6,25 +6,25 @@ configurations_sites = {
         "url_recherche": ["https://www.amazon", "/s?k="],
         "pays_domaines": [
                             ".com",
-                            ".ca",
-                            ".co.uk",
-                            ".de",
+                            #".ca",
+                            #".co.uk",
+                            #".de",
                             ".fr",
-                            ".es",
-                            ".it",
-                            ".nl",
-                            ".se",
-                            ".pl",
-                            ".co.jp",
-                            ".cn",
-                            ".in",
-                            ".com.au",
-                            ".sg",
-                            ".ae",
-                            ".sa",
-                            ".com.mx",
-                            ".com.br",
-                            ".com.tr"
+                            #".es",
+                            #".it",
+                            #".nl",
+                            #".se",
+                            #".pl",
+                            #".co.jp",
+                            #".cn",
+                            #".in",
+                            #".com.au",
+                            #".sg",
+                            #".ae",
+                            #".sa",
+                            #".com.mx",
+                            #".com.br",
+                            #".com.tr"
                           ],
 
         "devant_prix":  "<span class=\"a-price aok-align-center\" data-a-size="

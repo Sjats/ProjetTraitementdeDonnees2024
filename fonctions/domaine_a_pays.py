@@ -144,5 +144,7 @@ domaine_a_pays = {
 
 
 def DomainePays(domain):
+    if domain[-4:] == ".com":
+        return "United States"
     domain = domain.lower()[-3:]
     return domaine_a_pays[domain]
