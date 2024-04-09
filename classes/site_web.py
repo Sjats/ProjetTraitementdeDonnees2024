@@ -3,7 +3,7 @@ import requests
 import os
 import pickle
 from prix import Prix
-from ..fonctions import domaine_a_devise
+from ..fonctions.domaine_a_devise import DomaineDevise
 from ..fonctions import domaine_a_pays
 from ..donnees import renseigement_sites_web
 
@@ -63,7 +63,7 @@ class SiteWeb:
                           "0"*(4 - auxi) + str(num))
             prix = self.recherche_prix(html)
             pays = domaine_a_pays.DomainePays(domaine)
-            devise = domaine_a_devise.DomaineDevise(domaine)
+            devise = DomaineDevise(domaine)
 
             self.__database_html[id_article] = html
             self.__database[id_article] = Article(id_article,
