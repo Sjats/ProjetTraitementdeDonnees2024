@@ -45,27 +45,26 @@ class SiteWeb:
         """
 
         htmls = []
-        payss = []
 
-        for url_articles, pays in self.__urls_articles:
+        for url_articles, domaine in self.__urls_articles:
             resultat_recherche = requests.get(url_articles,
                                               headers=self.__entete)
-            payss.append(pays)
 
             resultat_recherche.raise_for_status()
 
-            self.htmls.append(resultat_recherche.text)
+            self.htmls.append((resultat_recherche.text, domaine))
 
         self.__database = {}
         self.__database_html = {}
 
-        for num, html in enumerate(htmls):
+        for num, (html, domaine) in enumerate(htmls):
             auxi = len(str(num))
             id_article = (str(self._nom) + "-" +
                           "0"*(4 - auxi) + str(num))
             prix = self.recherche_prix(html)
-            pays = payss[num]
-            devise = domaine_a_devise.DomaineDevise(pays)
+            pays = domaine_a_pays.DomainePays(domaine)
+            devise = domaine_a_devise.DomaineDevise(domaine)
+
             self.__database_html[id_article] = html
             self.__database[id_article] = Article(id_article,
                                                   Prix(prix, devise),
@@ -88,10 +87,10 @@ class SiteWeb:
     def recherche_url_articles(self):
 
         if self.__requete_top_5 is not None:
-            for pays in self.__pays:
+            for domaine in self.pays_domaines:
 
-                url = (self.__url_recherche[0] + pays + self.__url_recherche[1]
-                       + self.__requete_top_5)
+                url = (self.__url_recherche[0] + domaine +
+                       self.__url_recherche[1] + self.__requete_top_5)
 
                 html_recherche = requests.get(url, headers=self.entete).text
 
@@ -107,10 +106,10 @@ class SiteWeb:
                     pos_apres_link = html_recherche.find(
                                     self.__apres_url_article) - 2
 
-                    url = (self.__url_recherche[0] + pays +
+                    url = (self.__url_recherche[0] + domaine +
                            html_recherche[pos_avant_link: pos_apres_link])
 
-                    self.__urls_articles.append(url, pays)
+                    self.__urls_articles.append((url, domaine))
 
         if self.__requete_pays_ref is not None:
             pass
