@@ -1,11 +1,10 @@
-import pandas as pd
-import geopandas as gpd
-import folium
-import branca.colormap as cm
+# Import pour histogramme :
 import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+
 
 class InterfaceUtilisateur:
     """
@@ -20,66 +19,85 @@ class InterfaceUtilisateur:
         self._indices_produits = indices_produits
         self._indices_categorie_produit = indices_categorie_produit
 
+
+    def plot_histogramme(self):
+
+        def tracer_histogramme(index_selectionne, categorie_selectionnee):
+            plt.clf()  # Effacer le tracé précédent
+            indices = []
+            for k in self._indices_categorie_produit.values():
+                indices.append(k[categorie_selectionnee][index_selectionne-1])
+            fig, ax = plt.subplots(figsize=(8, 6))  # Ajuster la taille du tracé
+            ax.bar(range(1, len(self._indices_categorie_produit) + 1), indices, color='skyblue')
+            ax.set_xlabel('Pays')
+            ax.set_ylabel("Valeur de l'indice")
+            ax.set_title(f"Histogramme pour la catégorie '{categorie_selectionnee}' pour l'indice {index_selectionne}")
+            ax.yaxis.grid(True)  # Ajouter une grille horizontale
+            ax.set_xticks(range(1,len(self._indices_categorie_produit)+1))  # Définir les positions des ticks sur l'axe des abscisses (+1 car sinon le premier pays s'affiche en 0)
+            ax.set_xticklabels(self._indices_categorie_produit.keys())  # Attribuer les noms des pays aux positions des ticks
+
+            canvas = FigureCanvasTkAgg(fig, master=fenetre)
+            canvas.draw()
+            canvas.get_tk_widget().grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+
+        def on_index_selected(event):
+            index_selectionne = int(selecteur_index.get()) # important de metre un
+            # entier car str par défault
+            categorie_selectionnee = selecteur_categorie.get()
+            tracer_histogramme(index_selectionne, categorie_selectionnee)
+
+        def on_category_selected(event):
+            index_selectionne = int(selecteur_index.get())
+            categorie_selectionnee = selecteur_categorie.get()
+            tracer_histogramme(index_selectionne, categorie_selectionnee)
+
+        # Création de la fenêtre principale
+        fenetre = tk.Tk()
+        fenetre.title('Histogramme interactif')
+
+        # Sélecteur d'indices
+        indices = list(range(1, len(self._indices_categorie_produit['France']['High-Tech']) + 1))
+        selecteur_index = ttk.Combobox(fenetre, values=indices)
+        selecteur_index.grid(row=0, column=0, padx=10, pady=10)
+        selecteur_index.current(0)
+        selecteur_index.bind("<<ComboboxSelected>>", on_index_selected)
+
+        # Sélecteur de catégorie
+        categories = list(self._indices_categorie_produit['France'].keys())
+        selecteur_categorie = ttk.Combobox(fenetre, values=categories)
+        selecteur_categorie.grid(row=0, column=1, padx=10, pady=10)
+        selecteur_categorie.current(0)
+        selecteur_categorie.bind("<<ComboboxSelected>>", on_category_selected)
+
+        # Affichage initial de l'histogramme
+        tracer_histogramme(indices[0], categories[0])
+
+        # Lancement de la boucle principale
+        fenetre.mainloop()
+
     def AfficherCarte(self):
-        # Créer une carte centrée sur une position initiale
-        map_world = folium.Map(location=[0, 0], zoom_start=2)
+        return 'yo'
 
-        # Ajouter la couche de fond de carte OpenStreetMap
-        folium.TileLayer('openstreetmap').add_to(map_world)
+    def ChargerNouveauxIndices():
+        return 'yo'
 
-        # Afficher la carte
-        map_world
+# test histogramme
+dic_test = {
+            'France': {
+                'High-Tech': [82, 75, 90, 85],
+                'Fruit': [60, 65, 70, 68]
+            },
+            'Allemagne': {
+                'High-Tech': [75, 70, 80, 78],
+                'Fruit': [55, 60, 65, 63]
+            },
+            'USA': {
+                'High-Tech': [90, 85, 95, 92],
+                'Fruit': [70, 75, 80, 78]
+            }}
 
+mon_test = InterfaceUtilisateur({"f": 5}, dic_test)
+mon_test.plot_histogramme()
 
-    def plot_histogram(self, selected_index):
-        countries = list(self._indices_categorie_produit.keys())
-        indices = [data[country][selected_index] for country in countries]
-
-        fig, ax = plt.subplots()
-        color = colors[selected_index]  # Changer la couleur en fonction de l'indice
-        ax.bar(countries, indices, color=color)
-        ax.set_xlabel('Pays')
-        ax.set_ylabel('Indice')
-        ax.set_title(f'Histogramme pour l\'indice {selected_index}')
-
-        canvas = FigureCanvasTkAgg(fig, master=window)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=1, column=0)
-    # mettre a jour la fenêtre si je zoom
-        window.update_idletasks()
-
-# Exemple de données (remplacez cela par votre dictionnaire de données)
-data = {
-    'Pays1': [10, 20, 30],
-    'Pays2': [15, 25, 35],
-    'Pays3': [12, 22, 32]
-}
-
-def on_index_selected(event):
-    selected_index = index_selector.current()
-    plot_histogram(selected_index)
-
-colors =['blue', 'green', 'red']
-# Créer la fenêtre principale
-window = tk.Tk()
-window.title('Histogramme interactif')
-
-# Créer un menu déroulant pour sélectionner l'indice
-index_selector = ttk.Combobox(window, values=list(range(len(data['Pays1']))))
-index_selector.grid(row=0, column=0)
-index_selector.current(0)
-index_selector.bind("<<ComboboxSelected>>", on_index_selected)
-
-# Afficher l'histogramme initial
-plot_histogram(index_selector.current())
-
-# Lancer la boucle principale de l'interface
-window.mainloop()
-
-
-
-def ChargerNouveauxIndices():
-    return 'yo'
-
-x = InterfaceUtilisateur()
-x.AfficherCarte()
+# test carte
