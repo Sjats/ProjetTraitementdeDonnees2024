@@ -77,7 +77,9 @@ class InterfaceUtilisateur:
         fenetre.mainloop()
 
     def AfficherCarte(self):
-        return 'yo'
+        # Chemin vers le fichier GeoJSON
+        geojson_path = 'world_country_boundaries.geojson.json'
+
 
     def ChargerNouveauxIndices():
         return 'yo'
