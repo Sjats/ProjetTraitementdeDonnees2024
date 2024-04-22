@@ -135,11 +135,13 @@ class SiteWeb:
                     prix2 = soup.find_all('span', {'class':"a-price-fraction"})
                     #print(prix1, prix2)
                     for i in range(min(5, max(len(prix1)-1,0))):
-                        if prix2 is None or len(prix2) < 2:
-                            prix = float(str(prix1[i].text.strip()).replace(',', ''))
-                        else :
-                            prix = float(str(prix1[i].text.strip()).replace(',', '')) + float(prix2[i].text.strip()) * 0.01
-
+                        if str(prix1[i].text.strip()).replace(',', '').isdigit():
+                            if prix2 is None or len(prix2) < 2:
+                                prix = float(str(prix1[i].text.strip()).replace(',', ''))
+                            else :
+                                prix = float(str(prix1[i].text.strip()).replace(',', '')) + float(prix2[i].text.strip()) * 0.01
+                        else: 
+                            prix = None
                             
                         #print(title)
                         self.__database[pays + "/" + requete + "/" + str(i)] = Article(pays + "/" + requete + "/" + str(i), Prix(devise, prix), pays)

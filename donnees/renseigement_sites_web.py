@@ -3,7 +3,7 @@ requete_top_5 = [
 #    "Coffee+maker",
 #    "AA+alkaline+battery+pack",
 #    "Non-slip+yoga+mat",
-    "Bluetooth+wireless+earbuds",
+#    "Bluetooth+wireless+earbuds",
     "LED+desk+lamp",
     "Portable+external+battery",
     "Portable+Bluetooth+speaker",
