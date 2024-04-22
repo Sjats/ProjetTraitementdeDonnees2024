@@ -4,6 +4,8 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
+from scrapingbee import ScrapingBeeClient
+
 
 from .article import Article
 import requests
@@ -14,7 +16,11 @@ from fonctions.domaine_a_devise import DomaineDevise
 from fonctions import domaine_a_pays
 from donnees import renseigement_sites_web
 from fonctions import domaine_a_langue
-from googletrans import Translator
+from translate import Translator
+from bs4 import BeautifulSoup
+
+
+client = ScrapingBeeClient(api_key='AYM2KGIPOXYHSPU18NZIXA5NWA9U78H8E5F0GKFVJBB0N6857EWDHW0VM4R34Q5VY5NX2W3INGFC9FTF')
 
 
 class SiteWeb:
@@ -96,45 +102,74 @@ class SiteWeb:
 
     def recherche_url_articles(self):
         self.urls_articles = []
+        self.__database = {}
+        
         if hasattr(self, 'requete_top_5'):
-            print(self.requete_top_5)
+            print("Recherche : " + str(self.requete_top_5))
             for requete in self.requete_top_5:
                 for domaine in self.pays_domaines:
-                    translator = Translator()
+                    
                     langue = domaine_a_langue.DomaineLangue(domaine)
-                    requte_trad = translator.translate(requete, dest=langue).text
+                    pays = domaine_a_pays.DomainePays(domaine)
+                    devise = DomaineDevise(domaine)
+                    print(requete, langue)
+                    translator = Translator(to_lang = langue)
+                    requte_trad = translator.translate(requete)
 
                     url = (self.url_recherche[0] + domaine +
                            self.url_recherche[1] + requte_trad)
 
-                    html_recherche = requests.get(url,
-                                                  headers=self.__entete).text
+                    html_recherche = client.get(url).content
 
-                    pos_avant_link = 0
-                    for num_article in range(5):
-                        pos_avant_link = (
-                            html_recherche.find(
-                                (self.devant_url_article),
-                                len(self.devant_url_article) +
-                                pos_avant_link + 1
-                                ))
+                    soup = BeautifulSoup(html_recherche, "html.parser")
+                    #print(soup.price)
+                    #title = soup.find('span', {'class':"a-size-medium a-color-base a-text-normal"})
+                    #if title is None:
+                    #    title = soup.find('span', {'class':"a-size-base-plus a-color-base a-text-normal"})
+                    #    if title is None:
+                    #        title = soup.find('div', {'class':"a-section octopus-dlp-asin-title"})
+                    #        if title is None:
+                    #            title = pays + "/" + requete + "/"
+                    
+                    prix1 = soup.find_all('span', {'class':"a-price-whole"})
+                    prix2 = soup.find_all('span', {'class':"a-price-fraction"})
+                    #print(prix1, prix2)
+                    for i in range(min(5, max(len(prix1)-1,0))):
+                        if prix2 is None or len(prix2) < 2:
+                            prix = float(str(prix1[i].text.strip()).replace(',', ''))
+                        else :
+                            prix = float(str(prix1[i].text.strip()).replace(',', '')) + float(prix2[i].text.strip()) * 0.01
 
-                        pos_apres_link = html_recherche.find(
-                                        self.apres_url_article) - 2
+                            
+                        #print(title)
+                        self.__database[pays + "/" + requete + "/" + str(i)] = Article(pays + "/" + requete + "/" + str(i), Prix(devise, prix), pays)
+                self.EnregistrementHtml()
+                self.__database = {}
 
-                        url = (self.url_recherche[0] + domaine +
-                               html_recherche[pos_avant_link: pos_apres_link])
 
-                        self.urls_articles.append((url, domaine))
-        print(self.urls_articles)
+                    #pos_avant_link = 0
+                    #for num_article in range(5):
+                    #    pos_avant_link = (
+                    #        html_recherche.find(
+                    #            (self.devant_url_article),
+                    #            len(self.devant_url_article) +
+                    #            pos_avant_link + 1
+                    #            ))
+
+                    #    pos_apres_link = html_recherche.find(
+                    #                    self.apres_url_article) - 2
+
+                    #    url = (self.url_recherche[0] + domaine +
+                    #           html_recherche[pos_avant_link: pos_apres_link])
+
+                    #    self.urls_articles.append((url, domaine))
 
         #if self.requete_pays_ref is not None:
         #    pass
 
     def WebScrapping(self):
         self.recherche_url_articles()
-        self.recherche_articles()
-        self.EnregistrementHtml()
+        #self.recherche_articles()
 
     def EnregistrementHtml(self):
 
@@ -147,22 +182,9 @@ class SiteWeb:
             with open(self.__adresse_fichier + "database.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        if not os.path.exists(self.__adresse_fichier + "database_html.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database_html_fichier = {}
-
-        else:
-            # On ouvre la BDD
-            with open(self.__adresse_fichier +
-                      "database_html.pkl", "rb") as file:
-
-                database_html_fichier = pickle.load(file)
 
         database_fichier.update(self.__database)
-        database_html_fichier.update(self.__database_html)
 
         with open(self.__adresse_fichier + "database.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-        with open(self.__adresse_fichier + "database_html.pkl", "wb") as file:
-            pickle.dump(database_html_fichier, file)
