@@ -20,7 +20,7 @@ from translate import Translator
 from bs4 import BeautifulSoup
 
 
-client = ScrapingBeeClient(api_key='AYM2KGIPOXYHSPU18NZIXA5NWA9U78H8E5F0GKFVJBB0N6857EWDHW0VM4R34Q5VY5NX2W3INGFC9FTF')
+client = ScrapingBeeClient(api_key='WJ6LI7YZEB7N5JUA4YB4E2EUL8EMU2OF1LFWTN7UYGJP683QO3CWIJAAZE7SO2W3WN5YKE32XDJ9E08U')
 
 
 class SiteWeb:
@@ -113,7 +113,7 @@ class SiteWeb:
                     pays = domaine_a_pays.DomainePays(domaine)
                     devise = DomaineDevise(domaine)
                     print(requete, langue)
-                    translator = Translator(to_lang = langue)
+                    translator = Translator(langue)
                     requte_trad = translator.translate(requete)
 
                     url = (self.url_recherche[0] + domaine +
