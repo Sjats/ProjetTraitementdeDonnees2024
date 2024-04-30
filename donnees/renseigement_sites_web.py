@@ -73,9 +73,9 @@ configurations_sites = {
                             ".com.au",
                           ],
 
-        "_devant_prix_entier":  ['span', {'class':"a-price-whole"}],
+        "_devant_prix_entier":  ['span', {'class': "a-price-whole"}],
 
-        "_devant_prix_decimal": ['span', {'class':"a-price-fraction"}],
+        "_devant_prix_decimal": ['span', {'class': "a-price-fraction"}],
 
         "requete": requete_amazon,
         "_scraping_type": "Bee"
@@ -89,6 +89,7 @@ configurations_sites = {
         "apres_url_article": "",
         "requete_top_5": "",
         "requete_pays_ref": "",
+        "_scraping_type": "Normal"
 
     }
 }
