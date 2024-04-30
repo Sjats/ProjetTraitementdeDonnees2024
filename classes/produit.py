@@ -10,7 +10,7 @@ from fonctions.domaine_a_pays import domaine_a_pays
 
 
 class Produit:
-    def __init__(self, nom: str, articles: dict):
+    def __init__(self, nom: str, articles: dict[str, Article]):
         """Initialise un objet Produit avec un nom et un dictionnaire
         d'articles.
 
@@ -29,6 +29,30 @@ class Produit:
         Produit
             Un objet Produit initialisé avec le nom et les articles fournis.
         """
+        # Vérification des types des arguments
+        if not isinstance(nom, str):
+            raise TypeError("Le nom doit être une instance de str.")
+        
+        if not isinstance(articles, dict):
+            raise TypeError(
+                "Les articles doivent être une instance de dictionnaire."
+            )
+        
+        for nom in articles.keys():
+            if not isinstance(nom, str):
+                raise TypeError(
+                    "Les clés du dictionnaire d'articles doivent être une "
+                    "instance de str."
+                )
+        
+        for article in articles.values():
+            if not isinstance(article, Article):
+                raise TypeError(
+                    "Les valeurs du dictionnaire d'articles doivent être une "
+                    "instance d'Article"
+                )
+        
+        # Initialisation des attributs
         self._nom = nom
         self._articles = articles
 

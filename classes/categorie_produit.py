@@ -34,6 +34,30 @@ class CategorieProduit:
             Un objet CategorieProduit initialisé avec le nom et les produits
             fournis.
         """
+        # Vérification des types des arguments
+        if not isinstance(nom, str):
+            raise TypeError("Le nom doit être une instance de str.")
+        
+        if not isinstance(produits, dict):
+            raise TypeError(
+                "Les produits doivent être une instance de dictionnaire."
+            )
+        
+        for nom in produits.keys():
+            if not isinstance(nom, str):
+                raise TypeError(
+                    "Les clés du dictionnaire de produits doivent être une "
+                    "instance de str."
+                )
+        
+        for produit in produits.values():
+            if not isinstance(produit, Produit):
+                raise TypeError(
+                    "Les valeurs du dictionnaire de produits doivent être une "
+                    "instance de Produit"
+                )
+        
+        # Initialisation des attributs
         self._nom = nom
         self._produits = produits
 
@@ -155,6 +179,7 @@ def bddinterfacecat():
 
 
 if __name__ == "__main__":
+    # Ca sera pour les tests
     p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
                          "riz2": Article("002", Prix('EUR', 20), "Spain"),
                          "riz3": Article("003", Prix('EUR', 25), "Germany"),
