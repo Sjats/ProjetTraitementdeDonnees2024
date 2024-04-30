@@ -28,6 +28,13 @@ class InterfaceUtilisateur:
         for keys in indice_catégorie_produit.keys():
 
     """
+    def ChargerNouveauxIndices():
+        """
+        fonction d'acutalisation qui s'assure d'avoir les données
+         les plus récentes
+        """
+        return 'yo'
+
     def __init__(self, indices_produits, indices_categorie_produit):
         """
         Initialise une instance de la classe InterfaceUtilisateur.
@@ -38,6 +45,10 @@ class InterfaceUtilisateur:
         indices_categorie_produit : dict
             Un dictionnaire contenant les indices des catégories de produits par pays.
         """
+        if not isinstance(indices_produits : dict):
+            raise TypeError("les indices des produits doivent être renseignés sous la forme d'un dictionnaire.")
+        if not isinstance(indices_categorie_produit : dict):
+            raise TypeError("Les indices des catégories de produits doivent être renseignés sous la forme d'un dictionnaire.")
         self._indices_produits = indices_produits
         self._indices_categorie_produit = indices_categorie_produit
 
@@ -153,9 +164,6 @@ class InterfaceUtilisateur:
 
         # Afficher la carte dans Streamlit
         st.plotly_chart(fig)
-
-    def ChargerNouveauxIndices():
-        return 'yo'
 
 # test histogramme
 dic_test = {
