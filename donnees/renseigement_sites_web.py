@@ -1,4 +1,3 @@
-#requete_top_5 = ["rice", "sugar"]
 requete_top_5 = [
 #    "Coffee+maker",
 #    "AA+alkaline+battery+pack",
@@ -51,8 +50,8 @@ requete_pays_ref = ["requete1", "requete2"]
 
 configurations_sites = {
     "amazon": {
-        "url_recherche": ["https://www.amazon", "/s?k="],
-        "pays_domaines": [  
+        "_url_recherche": ["https://www.amazon", "/s?k="],
+        "_pays_domaines": [
                             ".sg",
                             ".ae",
                             ".com.mx",
@@ -74,15 +73,10 @@ configurations_sites = {
                             ".com.au",
                           ],
 
-        "devant_prix":  "<span class=\"a-price aok-align-center\" data-a-size="
-                        "\"xl\" data-a-color=\"base\"><span "
-                        "class=\"a-offscreen\">",
+        "_devant_prix_entier":  ['span', {'class':"a-price-whole"}],
 
-        "devant_url_article": "<a class=\"a-link-normal s-no-outline\" "
-                              "href=\"",
-        "apres_url_article": "<div class=\"a-section aok-relative "
-                             "s-image-square-aspect\"><img "
-                             "class=\"s-image\" src=",
+        "_devant_prix_decimal": ['span', {'class':"a-price-fraction"}],
+
         "requete_top_5": requete_top_5,
         "requete_pays_ref": requete_pays_ref,
 
