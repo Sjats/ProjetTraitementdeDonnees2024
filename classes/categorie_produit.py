@@ -1,6 +1,15 @@
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+
 from produit import Produit
 from article import Article
 from prix import Prix
+from fonctions.domaine_a_pays import domaine_a_pays
 import numpy as np
 
 
@@ -80,15 +89,28 @@ class CategorieProduit:
 
 
 p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-                    "riz2": Article("002", Prix('EUR', 20), "Espagne"),
-                    "riz3": Article("003", Prix('EUR', 40), "Allemagne"),
-                    "riz4": Article("004", Prix('EUR', 30), "Italie")})
+                    "riz2": Article("002", Prix('EUR', 20), "Spain"),
+                    "riz3": Article("003", Prix('EUR', 40), "Germany"),
+                    "riz4": Article("004", Prix('EUR', 30), "Italy")})
 p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
-                    "pat2": Article("102", Prix('EUR', 25), "Espagne"),
-                    "pat3": Article("103", Prix('EUR', 15), "Allemagne"),
-                    "pat4": Article("104", Prix('EUR', 27), "Italie")})
+                    "pat2": Article("102", Prix('EUR', 25), "Spain"),
+                    "pat3": Article("103", Prix('EUR', 15), "Germany"),
+                    "pat4": Article("104", Prix('EUR', 90), "Italy")})
 print(p1._CalculIndicesProduit())
 print(p2._CalculIndicesProduit()) 
 c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
 print(c1._CalculIndicesCategories())
 
+
+
+
+indicecat = dict()
+for pays in domaine_a_pays.values():
+    indicepays = dict()
+    for cat in [c1]:
+        if pays not in cat._CalculIndicesCategories()[0].keys():
+            indicepays[cat] = np.nan
+        else :
+            indicepays[cat] = [cat._CalculIndicesCategories()[0][pays], cat._CalculIndicesCategories()[1][pays]]
+    indicecat[pays] = indicepays
+print(indicecat)
