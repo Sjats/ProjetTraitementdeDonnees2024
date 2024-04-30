@@ -3,7 +3,7 @@ from article import Article
 from prix import Prix
 import numpy as np
 
-
+#Categories = [CategorieProduit('Appareils électroménagers et électroniques', {'Coffee Maker' : Produit('Coffee Maker', Article)})]
 class CategorieProduit:
     def __init__(self, nom: str, produits: dict[str, Produit]):
         self._nom = nom
@@ -78,6 +78,36 @@ class CategorieProduit:
         # Return des indices
         return [indicescat01, indicescatfrance]
 
+<<<<<<< HEAD
+if __name__ == "__main__":
+    p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
+                        "riz2": Article("002", Prix('EUR', 20), "Spain"),
+                        "riz3": Article("003", Prix('EUR', 25), "Germany"),
+                        "riz4": Article("004", Prix('USD', 30), "Italy")})
+    p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
+                        "pat2": Article("102", Prix('EUR', 25), "Spain"),
+                        "pat3": Article("103", Prix('EUR', 15), "Germany"),
+                        "pat4": Article("104", Prix('USD', 20), "Italy")})
+    print(p1._CalculIndicesProduit())
+    print(p2._CalculIndicesProduit())
+    c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
+    print(c1._CalculIndicesCategories())
+
+
+def bddinterfacecat():
+    indicecat = dict()
+    for pays in domaine_a_pays.values():
+        indicepays = dict()
+        for cat in [c1]:
+            if pays not in cat._CalculIndicesCategories()[0].keys():
+                indicepays[cat._nom] = np.nan
+            else :
+                indicepays[cat._nom] = [cat._CalculIndicesCategories()[0][pays], cat._CalculIndicesCategories()[1][pays]]
+        indicecat[pays] = indicepays
+    return indicecat
+
+print(bddinterfacecat())
+=======
 
 p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
                     "riz2": Article("002", Prix('EUR', 20), "Espagne"),
@@ -92,3 +122,4 @@ print(p2._CalculIndicesProduit())
 c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
 print(c1._CalculIndicesCategories())
 
+>>>>>>> e0d7defe762e08ccfb689709ae338f9949e472ec
