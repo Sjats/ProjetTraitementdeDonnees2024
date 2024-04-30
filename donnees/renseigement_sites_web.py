@@ -1,4 +1,4 @@
-requete_top_5 = [
+requete_amazon = [
 #    "Coffee+maker",
 #    "AA+alkaline+battery+pack",
 #    "Non-slip+yoga+mat",
@@ -77,8 +77,8 @@ configurations_sites = {
 
         "_devant_prix_decimal": ['span', {'class':"a-price-fraction"}],
 
-        "requete_top_5": requete_top_5,
-        "requete_pays_ref": requete_pays_ref,
+        "requete": requete_amazon,
+        "_scraping_type": "Bee"
 
     },
     "site2": {
