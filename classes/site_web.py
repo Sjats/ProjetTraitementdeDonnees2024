@@ -80,7 +80,7 @@ class SiteWeb:
                 if self._scraping_type == "Bee":
                     html_recherche = client.get(url).content
 
-                if self.scraping_type == "Normal":
+                if self._scraping_type == "Normal":
                     html_recherche = requests.get(url, headers=self.entete)
                     html_recherche = html_recherche.text
 
