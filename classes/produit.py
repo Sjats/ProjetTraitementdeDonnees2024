@@ -1,23 +1,14 @@
 import sys
 import os
+from article import Article
+from prix import Prix
+import numpy as np
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from article import Article
-from prix import Prix
 from fonctions.domaine_a_pays import domaine_a_pays
-import numpy as np
 
-"""
-    Examples
-    --------
-    >>> p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-                     "riz2": Article("002", Prix('EUR', 20), "Espagne"),
-                     "riz3": Article("003", Prix('EUR', 40), "Allemagne"),
-                     "riz4": Article("004", Prix('EUR', 30), "Italie")})
-    >>> print(p1._CalculIndicesProduit())
-    [{'France': 0.0, 'Espagne': 0.33, 'Allemagne': 1.0, 'Italie': 0.67}, {'France': 1.0, 'Espagne': 2.0, 'Allemagne': 4.0, 'Italie': 3.0}]
-    """
+
 class Produit:
     def __init__(self, nom: str, articles: dict):
         """Initialise un objet Produit avec un nom et un dictionnaire
@@ -28,7 +19,7 @@ class Produit:
         nom : str
             Le nom du produit.
 
-        articles : dict
+        articles : dict[str, Article]
             Un dictionnaire contenant des articles associés au produit,
             où les clés sont les noms des articles et les valeurs sont
             des objets Article.
@@ -108,36 +99,54 @@ class Produit:
         # Calcul de indicesfrance
         for key in self._articles.keys():
             if prix_prod[self._articles[key]._pays] is not None:
-                indfrance = round(prix_prod[self._articles[key]._pays] / prix_france, 2)
+                indfrance = round(
+                    prix_prod[self._articles[key]._pays] / prix_france,
+                    2
+                    )
                 indicesfrance[self._articles[key]._pays] = indfrance
 
         # Return des indices
         return [indices01, indicesfrance]
 
+
+def bddinterfaceprod():
+    """Crée la base de données nécessaire à l'interface pour accéder aux
+    indices des produits par pays.
+    Cette fonction parcourt les indices des produits pour chaque pays.
+    Les indices sont stockés dans un dictionnaire de la forme
+    {pays: {produit: [indice_01, indice_France]}}.
+
+    Returns
+    -------
+    dict:
+        Un dictionnaire contenant les indices des produits par pays.
+        Les clés sont les noms des pays et les valeurs sont des dictionnaires
+        contenant les indices des produits pour ce pays.
+    """
+    indiceprod = dict()
+    for pays in domaine_a_pays.values():
+        indicepays = dict()
+        for prod in [p1, p2]:
+            if pays not in prod._CalculIndicesProduit()[0].keys():
+                indicepays[prod._nom] = np.nan
+            else:
+                indicepays[prod._nom] = (
+                    [prod._CalculIndicesProduit()[0][pays],
+                        prod._CalculIndicesProduit()[1][pays]]
+                )
+        indiceprod[pays] = indicepays
+    return indiceprod
+
+
 if __name__ == "__main__":
+    # Ca sera pour les tests
     p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-                        "riz2": Article("002", Prix('EUR', 20), "Spain"),
-                        "riz3": Article("003", Prix('EUR', 40), "Germany"),
-                        "riz4": Article("004", Prix('USD', 30), "Italy")})
+                         "riz2": Article("002", Prix('EUR', 20), "Spain"),
+                         "riz3": Article("003", Prix('EUR', 40), "Germany"),
+                         "riz4": Article("004", Prix('USD', 30), "Italy")})
     p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
-                        "pat2": Article("102", Prix('EUR', 25), "Spain"),
-                        "pat3": Article("103", Prix('EUR', 15), "Germany"),
-                        "pat4": Article("104", Prix('USD', 27), "Italy")})
+                         "pat2": Article("102", Prix('EUR', 25), "Spain"),
+                         "pat3": Article("103", Prix('EUR', 15), "Germany"),
+                         "pat4": Article("104", Prix('USD', 27), "Italy")})
     print(p1._CalculIndicesProduit())
     print(p2._CalculIndicesProduit())
-
-    def bddinterfaceprod():
-        indiceprod = dict()
-        for pays in domaine_a_pays.values():
-            indicepays = dict()
-            for prod in [p1, p2]:
-                if pays not in prod._CalculIndicesProduit()[0].keys():
-                    indicepays[prod._nom] = np.nan
-                else :
-                    indicepays[prod._nom] = [prod._CalculIndicesProduit()[0][pays], prod._CalculIndicesProduit()[1][pays]]
-            indiceprod[pays] = indicepays
-        return indiceprod
-
-    print(bddinterfaceprod())
-
-
