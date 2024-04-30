@@ -90,16 +90,16 @@ class CategorieProduit:
 
 p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
                     "riz2": Article("002", Prix('EUR', 20), "Spain"),
-                    "riz3": Article("003", Prix('EUR', 40), "Germany"),
+                    "riz3": Article("003", Prix('EUR', 25), "Germany"),
                     "riz4": Article("004", Prix('USD', 30), "Italy")})
 p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
                     "pat2": Article("102", Prix('EUR', 25), "Spain"),
                     "pat3": Article("103", Prix('EUR', 15), "Germany"),
                     "pat4": Article("104", Prix('USD', 20), "Italy")})
-#print(p1._CalculIndicesProduit())
-#print(p2._CalculIndicesProduit()) 
+print(p1._CalculIndicesProduit())
+print(p2._CalculIndicesProduit())
 c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
-#print(c1._CalculIndicesCategories())
+print(c1._CalculIndicesCategories())
 
 
 
