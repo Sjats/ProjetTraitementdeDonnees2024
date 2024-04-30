@@ -1,9 +1,22 @@
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
 # Import pour histogramme :
 import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+# Import pour la carte interactive
+import streamlit as st
+import geopandas as gpd
+import numpy as np
+import plotly.express as px
+import pandas as pd
+import pycountry
 
 
 class InterfaceUtilisateur:
@@ -16,13 +29,29 @@ class InterfaceUtilisateur:
 
     """
     def __init__(self, indices_produits, indices_categorie_produit):
+        """
+        Initialise une instance de la classe InterfaceUtilisateur.
+
+        Attributes:
+        indices_produits : dict
+            Un dictionnaire contenant les indices des produits par pays.
+        indices_categorie_produit : dict
+            Un dictionnaire contenant les indices des catégories de produits par pays.
+        """
         self._indices_produits = indices_produits
         self._indices_categorie_produit = indices_categorie_produit
 
 
     def plot_histogramme(self):
+        """
+        Histogramme interactif qui permet de sélectionner la catégorie et l'indice.
+        Il renvoie sous forme d'un histogramme l'indice par pays.
 
+        """
         def tracer_histogramme(index_selectionne, categorie_selectionnee):
+            """
+            Crée l'histogramme pour un indice et une catégorie précise déjà séléctionnée.
+            """
             plt.clf()  # Effacer le tracé précédent
             indices = []
             for k in self._indices_categorie_produit.values():
@@ -42,6 +71,9 @@ class InterfaceUtilisateur:
 
 
         def on_index_selected(event):
+            """
+
+            """
             index_selectionne = int(selecteur_index.get()) # important de metre un
             # entier car str par défault
             categorie_selectionnee = selecteur_categorie.get()
@@ -77,9 +109,50 @@ class InterfaceUtilisateur:
         fenetre.mainloop()
 
     def AfficherCarte(self):
-        # Chemin vers le fichier GeoJSON
-        geojson_path = 'world_country_boundaries.geojson.json'
+        """
+        Affiche une carte interactive permettant
+        de séléctionner la ctégorie de produit et l'indice.
+        La carte affiche les indices par pays sous forme
+        d'un dégradé de couleurs
+        """
+        chemin_geojson = 'world_country_boundaries.geojson.json'
+        gdf = gpd.read_file(chemin_geojson) # Chemin vers le fichier GeoJSON
 
+        country_code_map = {country.alpha_2: country.name for country in pycountry.countries}
+        gdf['code'] = gdf['code'].map(country_code_map) # remplacer code alpha2 par nom du pays
+        list_pays = gdf['code'].tolist()
+        indices_n = list(range(1, len(self._indices_categorie_produit['France']['High-Tech']) + 1)) # liste numérique des indices
+        indices_t = ["indice_marius1", "indice_marius2", "indice_marius3", "indice_marius4"]
+        categories = categories = list(self._indices_categorie_produit['France'].keys())
+        indice = st.sidebar.selectbox("Choisissez un indice :", indices_t)
+        index_indice = indices_t.index(indice)
+        categorie = st.sidebar.selectbox("Choisissez une catégorie :", categories)
+        st.markdown(f"<h1 style='text-align: center; color: purple; font-size: 24px;'>Visualisation de l'indice {indice} par pays pour la catégorie {categorie}</h1>", unsafe_allow_html=True)
+
+        # Extraire les données pour l'indice et la catégorie sélectionnés
+        data = {}
+        for pays, valeurs in self.items():
+            if categorie in valeurs:
+                data[pays] = valeurs[categorie][index_indice-1]
+
+        # Dataframe car Plotly prend un dataframe en entrée
+        df_plotly = pd.DataFrame({'pays': list(data.keys()), 'Indice': list(data.values())})
+
+        # Créer la carte avec Plotly
+        fig = px.choropleth(df_plotly,
+                            geojson=gdf,
+                            locations='pays',
+                            color='Indice',
+                            color_continuous_scale='YlGnBu',
+                            range_color=(min(data.values()), max(data.values())),
+                            featureidkey='properties.code',
+                            projection='natural earth',
+                            labels={'Indice': f'Indice {indice}'}
+                            )
+
+
+        # Afficher la carte dans Streamlit
+        st.plotly_chart(fig)
 
     def ChargerNouveauxIndices():
         return 'yo'
@@ -99,7 +172,6 @@ dic_test = {
                 'Fruit': [70, 75, 80, 78]
             }}
 
-mon_test = InterfaceUtilisateur({"f": 5}, dic_test)
-mon_test.plot_histogramme()
-
-# test carte
+mon_test = InterfaceUtilisateur({"f": 5}, dic_test) # {"f": 5} dico de merde car on teste pas la dessus.
+# mon_test.plot_histogramme()
+mon_test.AfficherCarte()
