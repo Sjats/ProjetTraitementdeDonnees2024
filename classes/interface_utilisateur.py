@@ -3,13 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# Import pour la carte interactive
-import streamlit as st
-import geopandas as gpd
-import numpy as np
-import plotly.express as px
-import pandas as pd
-import pycountry
+
 
 
 class InterfaceUtilisateur:
@@ -83,43 +77,9 @@ class InterfaceUtilisateur:
         fenetre.mainloop()
 
     def AfficherCarte(self):
-        gdf = gpd.read_file("world_country_boundaries.geojson.json") # Chemin vers le fichier GeoJSON
+        # Chemin vers le fichier GeoJSON
+        geojson_path = 'world_country_boundaries.geojson.json'
 
-        country_code_map = {country.alpha_2: country.name for country in pycountry.countries}
-        gdf['code'] = gdf['code'].map(country_code_map) # remplacer code alpha2 par nom du pays
-        list_pays = gdf['code'].tolist()
-        indices_n = list(range(1, len(self._indices_categorie_produit['France']['High-Tech']) + 1)) # liste numérique des indices
-        indices_t = ["indice_marius1", "indice_marius2", "indice_marius3", "indice_marius4"]
-        categories = categories = list(self._indices_categorie_produit['France'].keys())
-        indice = st.sidebar.selectbox("Choisissez un indice :", indices_t)
-        index_indice = indices_t.index(indice)
-        categorie = st.sidebar.selectbox("Choisissez une catégorie :", categories)
-        st.markdown(f"<h1 style='text-align: center; color: purple; font-size: 24px;'>Visualisation de l'indice {indice} par pays pour la catégorie {categorie}</h1>", unsafe_allow_html=True)
-
-        # Extraire les données pour l'indice et la catégorie sélectionnés
-        data = {}
-        for pays, valeurs in self.items():
-            if categorie in valeurs:
-                data[pays] = valeurs[categorie][index_indice-1]
-
-        # Dataframe car Plotly prend un dataframe en entrée
-        df_plotly = pd.DataFrame({'pays': list(data.keys()), 'Indice': list(data.values())})
-
-        # Créer la carte avec Plotly
-        fig = px.choropleth(df_plotly,
-                            geojson=gdf,
-                            locations='pays',
-                            color='Indice',
-                            color_continuous_scale='YlGnBu',
-                            range_color=(min(data.values()), max(data.values())),
-                            featureidkey='properties.code',
-                            projection='natural earth',
-                            labels={'Indice': f'Indice {indice}'}
-                            )
-
-
-        # Afficher la carte dans Streamlit
-        st.plotly_chart(fig)
 
     def ChargerNouveauxIndices():
         return 'yo'
@@ -139,6 +99,7 @@ dic_test = {
                 'Fruit': [70, 75, 80, 78]
             }}
 
-mon_test = InterfaceUtilisateur({"f": 5}, dic_test) # {"f": 5} dico de merde car on teste pas la dessus.
-# mon_test.plot_histogramme()
-mon_test.AfficherCarte()
+mon_test = InterfaceUtilisateur({"f": 5}, dic_test)
+mon_test.plot_histogramme()
+
+# test carte

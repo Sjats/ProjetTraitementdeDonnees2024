@@ -1,15 +1,6 @@
-import sys
-import os
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-
-
 from produit import Produit
 from article import Article
 from prix import Prix
-from fonctions.domaine_a_pays import domaine_a_pays
 import numpy as np
 
 #Categories = [CategorieProduit('Appareils électroménagers et électroniques', {'Coffee Maker' : Produit('Coffee Maker', Article)})]
@@ -87,6 +78,7 @@ class CategorieProduit:
         # Return des indices
         return [indicescat01, indicescatfrance]
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
                         "riz2": Article("002", Prix('EUR', 20), "Spain"),
@@ -115,3 +107,19 @@ def bddinterfacecat():
     return indicecat
 
 print(bddinterfacecat())
+=======
+
+p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
+                    "riz2": Article("002", Prix('EUR', 20), "Espagne"),
+                    "riz3": Article("003", Prix('EUR', 40), "Allemagne"),
+                    "riz4": Article("004", Prix('EUR', 30), "Italie")})
+p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
+                    "pat2": Article("102", Prix('EUR', 25), "Espagne"),
+                    "pat3": Article("103", Prix('EUR', 15), "Allemagne"),
+                    "pat4": Article("104", Prix('EUR', 27), "Italie")})
+print(p1._CalculIndicesProduit())
+print(p2._CalculIndicesProduit()) 
+c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
+print(c1._CalculIndicesCategories())
+
+>>>>>>> e0d7defe762e08ccfb689709ae338f9949e472ec
