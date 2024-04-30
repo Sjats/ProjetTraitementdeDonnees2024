@@ -115,7 +115,7 @@ class InterfaceUtilisateur:
         La carte affiche les indices par pays sous forme
         d'un dégradé de couleurs
         """
-        chemin_geojson = 'world_country_boundaries.geojson.json'
+        chemin_geojson = 'classes/world_country_boundaries.geojson.json'
         gdf = gpd.read_file(chemin_geojson) # Chemin vers le fichier GeoJSON
 
         country_code_map = {country.alpha_2: country.name for country in pycountry.countries}
