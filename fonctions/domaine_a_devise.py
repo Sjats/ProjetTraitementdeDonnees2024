@@ -232,7 +232,7 @@ domaine_a_devise = {
     ".sn": "XOF",    # Senegal
     ".sl": "SLL",    # Sierra Leone
     ".tg": "XOF",    # Togo
-    ".com": "USD"    # United States
+    "com": "USD"    # United States
 }
 
 

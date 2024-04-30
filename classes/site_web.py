@@ -12,8 +12,9 @@ from translate import Translator
 from bs4 import BeautifulSoup
 
 
-client = ScrapingBeeClient(api_key="WJ6LI7YZEB7N5JUA4YB4E2EUL8EMU2OF1"
-                           "LFWTN7UYGJP683QO3CWIJAAZE7SO2W3WN5YKE32XDJ9E08U")
+client = ScrapingBeeClient(api_key="8GKVX0VKUZWJBY2GS4KKFEEZCVCS"
+                                   "UASEVRYQKMZHVHZZ9106YSXVRRW09XS6"
+                                   "4ZJF7HP6REVKQNM7R4EH")
 # cle api web scraping
 
 
@@ -64,12 +65,11 @@ class SiteWeb:
 
         for requete in self.requete:
             for domaine in self._pays_domaines:
+                print(domaine, requete)
 
-                langue = domaine_a_langue.DomaineLangue(domaine)
-                pays = domaine_a_pays.DomainePays(domaine)
-                devise = DomaineDevise(domaine)
-
-                print(requete, langue)
+                langue = domaine_a_langue.DomaineLangue(domaine[-3:])
+                pays = domaine_a_pays.DomainePays(domaine[-3:])
+                devise = DomaineDevise(domaine[-3:])
 
                 translator = Translator(langue)
                 requte_trad = translator.translate(requete)
@@ -90,33 +90,36 @@ class SiteWeb:
                                             self._devant_prix_entier[1])
                 prix_decimal = soup.find_all(self._devant_prix_decimal[0],
                                              self._devant_prix_decimal[1])
-
+                index = 0
                 for i in range(min(5, max(len(prix_entier)-1, 0))):
 
-                    str_prix_entier = str(prix_entier[i].text.strip())
-                    str_prix_entier = str_prix_entier.replace(',', '')
+                    str_prix_entier = str(prix_entier[i].get_text(strip=True))
+                    str_prix_entier = str_prix_entier.replace(',', '', 1)
+                    str_prix_entier = str_prix_entier.replace('.', '', 1)
 
                     if str_prix_entier.isdigit():
 
                         if prix_decimal is None or len(prix_decimal) < 2:
-                            montant = str_prix_entier
+                            montant = float(str_prix_entier)
 
                         else:
-                            str_prix_decimal = prix_decimal[i].text.strip()
+                            str_prix_decimal = prix_decimal[i].get_text(
+                                strip=True)
+
                             montant = (float(str_prix_entier) +
                                        float(str_prix_decimal) * 0.01)
                     else:
                         montant = None
-
-                    id_article = pays + "/" + requete + "/" + str(i)
+                    id_article = pays + "/" + requete + "/" + str(index)
                     article = Article(id_article,
                                       Prix(devise, montant),
                                       pays)
 
                     self.__database[id_article] = article
+                    index += 1
 
-            self.EnregistrementHtml()  # A treure
-            self.__database = {}  # A treure
+                self.EnregistrementHtml()  # A treure
+                self.__database = {}  # A treure
 
     def WebScrapping(self, requetes=None):
         """
@@ -142,7 +145,7 @@ class SiteWeb:
         self.recherche_articles()
         self.EnregistrementHtml()
 
-    def EnregistrementHtml(self, adresse=None):
+    def EnregistrementHtml(self, adresse="donnees/"):
         """
         Fonction qui enregistre les articles dans l'endroit indiqué
         Parameters
@@ -151,7 +154,7 @@ class SiteWeb:
             endroit dans lequel on enregistre le dictionnaire
         """
 
-        if not (isinstance(adresse, list) or adresse is None):
+        if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
 
         if not os.path.exists(self.adresse_fichier):

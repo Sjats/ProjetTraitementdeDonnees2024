@@ -23,15 +23,20 @@ class Prix:
 
         if not (isinstance(montant, float) or montant is None
                 or isinstance(montant, int)):
-            raise TypeError("devise doit être de "
+            print(montant, type(montant))
+            raise TypeError("montant doit être de "
                             "type float ou None")
+        print(montant)
 
         self.devise = devise
         self.montant = montant
-        if self.devise != "EUR":
-            self. _ConversionEuros()
-        else:
-            self.montant_euros = self.montant
+        # if self.devise != "EUR" and self.montant is not None:
+        #    self. _ConversionEuros()
+        # elif self.montant is None:
+        #    self.montant_euros = None
+        #    print("Sad")
+        # else:
+        #    self.montant_euros = self.montant
 
     def _ConversionEuros(self):
         """
@@ -44,6 +49,9 @@ class Prix:
         """
         self.montant_euros = self.__ObtientTauxChange() * self.montant
         return self.montant_euros
+
+    def __str__(self) -> str:
+        return (str(self.montant) + " " + self.devise)
 
     def __ObtientTauxChange(self):
         """

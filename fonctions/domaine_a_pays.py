@@ -139,7 +139,7 @@ domaine_a_pays = {
     ".sn": "Senegal",    # Senegal
     ".sl": "Sierra Leone",    # Sierra Leone
     ".tg": "Togo",    # Togo
-    ".com": "United States"    # United States
+    "com": "United States"    # United States
 }
 
 

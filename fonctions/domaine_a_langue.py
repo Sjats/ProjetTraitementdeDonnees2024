@@ -137,7 +137,7 @@ domain_language = {
     ".sn": "fr",
     ".sl": "fr",
     ".tg": "fr",
-    ".com": "en"
+    "com": "en"
 }
 
 
