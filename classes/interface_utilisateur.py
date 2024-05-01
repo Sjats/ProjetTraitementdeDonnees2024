@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 # Import pour la carte interactive
 import streamlit as st
 import geopandas as gpd
@@ -11,6 +12,9 @@ import plotly.express as px
 import pandas as pd
 import pycountry
 
+# import pour donnée les plus récentes
+# from produit import Produit
+# from categorie_produit import CategorieProduit
 
 class InterfaceUtilisateur:
     """
@@ -70,7 +74,7 @@ class InterfaceUtilisateur:
     def ChargerNouveauxIndices():
         """
         fonction d'acutalisation qui s'assure d'avoir les données
-         les plus récentes.
+        les plus récentes.
         """
         return 'yo'
 
@@ -93,10 +97,8 @@ class InterfaceUtilisateur:
 
     def plot_histogramme(self, sur_quoi : bool): # à faire : remplacer par le nom des indices sur le sélecteur.
         """
-        Génère un histogramme interactif permettant de
-        sélectionner la catégorie et l'indice.
-        La fonction s'aplique à un dictionnaire. C'est à dire self._indices_categorie_produits
-        ou self._indices_produits.
+        Génère un histogramme interactif permettant de sélectionner la
+        catégorie ou le produit (en fonction de notre choix) et l'indice.
 
         Attributes
         sur_quoi : bool
@@ -138,7 +140,9 @@ class InterfaceUtilisateur:
 
         def on_selected(event):
             """
-            Met à jour l'histogramme en fonction de la sélection de l'utilisateur dans les listes déroulantes d'indices et de catégories.
+            Met à jour l'histogramme en fonction de la sélection de
+            l'utilisateur dans les listes déroulantes d'indices et
+              de catégories.
 
             Args:
                 event: L'événement déclenché par la sélection de l'utilisateur.
