@@ -68,10 +68,15 @@ class SiteWeb:
         for requete in self.requete:
             for domaine in self._pays_domaines:
                 print(domaine, requete)
+                if self._pays is None:
 
-                langue = domaine_a_langue.DomaineLangue(domaine[-3:])
-                pays = domaine_a_pays.DomainePays(domaine[-3:])
-                devise = DomaineDevise(domaine[-3:])
+                    langue = domaine_a_langue.DomaineLangue(domaine)
+                    pays = domaine_a_pays.DomainePays(domaine)
+                    devise = DomaineDevise(domaine)
+                else:
+                    langue = domaine_a_langue.DomaineLangue(self._pays)
+                    pays = domaine_a_pays.DomainePays(self._pays)
+                    devise = DomaineDevise(self._pays)
 
                 translator = Translator(langue)
                 requte_trad = translator.translate(requete)
@@ -86,7 +91,6 @@ class SiteWeb:
                     html_recherche = requests.get(url, headers=self._entete)
                     html_recherche = html_recherche.text
                 soup = BeautifulSoup(html_recherche, "html.parser")
-                print(soup.body.get_text().strip())
 
                 prix_entier = soup.find_all(self._devant_prix_entier[0],
                                             self._devant_prix_entier[1])

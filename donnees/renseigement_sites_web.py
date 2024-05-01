@@ -75,6 +75,33 @@ requete_iherb = [
     "Antioxidant Blend"
 ]
 
+requete_supermarche = [
+    "bread",
+    "milk",
+    "eggs",
+    "cheese",
+    "yogurt",
+    "chicken",
+    "beef",
+    "pork",
+    "fish",
+    "shrimp",
+    "rice",
+    "pasta",
+    "potatoes",
+    "lettuce",
+    "tomatoes",
+    "carrots",
+    "onions",
+    "apples",
+    "bananas",
+    "oranges",
+    "strawberries",
+    "blueberries",
+    "cookies",
+    "chips",
+    "ice cream"
+]
 
 configurations_sites = {
     "amazon": {
@@ -106,7 +133,8 @@ configurations_sites = {
         "_devant_prix_decimal": ['span', {'class': "a-price-fraction"}],
 
         "requete": requete_amazon,
-        "_scraping_type": "Bee"
+        "_scraping_type": "Bee",
+        "_pays": None,
 
     },
     "iherb": {
@@ -134,7 +162,84 @@ configurations_sites = {
         "_devant_prix_decimal": None,
 
         "requete": requete_iherb,
+        "_scraping_type": "Normal",
+        "_pays": None,
+    },
+    "supermarches0": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "TilePrice_tile_price"
+                                          "_current__Jy4AT",
+                                          "data-testid": "Tile price current",
+                                          "data-qa": "tile_product_price"
+                                          }],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
         "_scraping_type": "Normal"
-
-    }
+    }, "supermarches1": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches2": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches3": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches4": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches5": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches6": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches7": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    }, "supermarches8": {
+        "_url_recherche": ["https://", ""],
+        "_pays_domaines": ['www.freshdirect.com/search?search='],
+        "_devant_prix_entier":  ['span', {'class': "price "}],
+        "_devant_prix_decimal": None,
+        "_pays": "ww",
+        "requete": requete_supermarche,
+        "_scraping_type": "Normal"
+    },
 }
