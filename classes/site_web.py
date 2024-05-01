@@ -49,10 +49,12 @@ class SiteWeb:
 
         self.adresse_fichier = "donnees/"
 
-        self._entete = {"User-Agent": "Mozilla/5.0 (Wind"
-                        "ows NT 10.0; Win64; x64; rv:66.0) Gecko/2010010"
-                        "1 Firefox/66.0",
-                        "Accept-Encoding": "gzip, deflate",
+        self._entete = {"User-Agent": "Mozilla/5.0 (Linux; "
+                        "Android 11; SAMSUNG SM-G973U) Apple"
+                        "WebKit/537.36 (KHTML, like Gecko) Sa"
+                        "msungBrowser/14.2 Chrome/87.0.4280.14"
+                        "1 Mobile Safari/537.36",
+                        'Accept-Encoding': 'identity',
                         "Accept": "text/html,application/xhtml+"
                         "xml,application/xml;q=0.9,*/*;q=0.8",
                         "DNT": "1", "Connection": "close",
@@ -81,16 +83,19 @@ class SiteWeb:
                     html_recherche = client.get(url).content
 
                 if self._scraping_type == "Normal":
-                    html_recherche = requests.get(url, headers=self.entete)
+                    html_recherche = requests.get(url, headers=self._entete)
                     html_recherche = html_recherche.text
-
                 soup = BeautifulSoup(html_recherche, "html.parser")
+                print(soup.body.get_text().strip())
 
                 prix_entier = soup.find_all(self._devant_prix_entier[0],
                                             self._devant_prix_entier[1])
-                prix_decimal = soup.find_all(self._devant_prix_decimal[0],
-                                             self._devant_prix_decimal[1])
+                print(prix_entier)
+                if self._devant_prix_decimal is not None:
+                    prix_decimal = soup.find_all(self._devant_prix_decimal[0],
+                                                 self._devant_prix_decimal[1])
                 index = 0
+
                 for i in range(min(5, max(len(prix_entier)-1, 0))):
 
                     str_prix_entier = str(prix_entier[i].get_text(strip=True))
