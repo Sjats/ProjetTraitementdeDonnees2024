@@ -32,26 +32,26 @@ class Produit:
         # Vérification des types des arguments
         if not isinstance(nom, str):
             raise TypeError("Le nom doit être une instance de str.")
-        
+
         if not isinstance(articles, dict):
             raise TypeError(
                 "Les articles doivent être une instance de dictionnaire."
             )
-        
+
         for nom in articles.keys():
             if not isinstance(nom, str):
                 raise TypeError(
                     "Les clés du dictionnaire d'articles doivent être une "
                     "instance de str."
                 )
-        
+
         for article in articles.values():
             if not isinstance(article, Article):
                 raise TypeError(
                     "Les valeurs du dictionnaire d'articles doivent être une "
                     "instance d'Article"
                 )
-        
+
         # Initialisation des attributs
         self._nom = nom
         self._articles = articles
