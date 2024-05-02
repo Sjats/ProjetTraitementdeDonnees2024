@@ -10,10 +10,6 @@ sys.path.append(parent_dir)
 from fonctions.domaine_a_pays import domaine_a_pays
 
 
-# Categories = [CategorieProduit('Appareils électroménagers et électroniques',
-# {'Coffee Maker' : Produit('Coffee Maker', Article)})]
-
-
 class CategorieProduit:
     def __init__(self, nom: str, produits: dict[str, Produit]):
         """Initialise un objet CategorieProduit avec un nom et un dictionnaire
@@ -146,6 +142,73 @@ class CategorieProduit:
 
         # Return des indices
         return [indicescat01, indicescatfrance]
+
+    def EnregistrementCategorieProduit(self, adresse="categories/"):
+        """
+        Fonction qui enregistre les catégories dans l'endroit indiqué
+        Parameters
+        ----------
+        adresse : str
+            endroit dans lequel on enregistre les catégories
+        """
+
+        if not (isinstance(adresse, str) or adresse is None):
+            raise TypeError("adresse est de type str")
+
+        if not os.path.exists(self.adresse_fichier):
+            raise ValueError("l'adresse fournie n'existe pas")
+
+        if adresse is not None:
+            self.adresse_fichier = adresse
+
+        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_fichier = {}
+
+        else:
+            # Ouvre la BDD
+            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+                database_fichier = pickle.load(file)
+
+        database_fichier.update(self.__database)
+
+        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database_fichier, file)
+
+    def EnregistrementIndicesCategorieProduit(self,
+                                              adresse="indice_produits/"):
+        """
+        Fonction qui enregistre les indice des catégories dans l'endroit
+        indiqué
+
+        Parameters
+        ----------
+        adresse : str
+            endroit dans lequel on enregistre les indices des catégories
+        """
+
+        if not (isinstance(adresse, str) or adresse is None):
+            raise TypeError("adresse est de type str")
+
+        if not os.path.exists(self.adresse_fichier):
+            raise ValueError("l'adresse fournie n'existe pas")
+
+        if adresse is not None:
+            self.adresse_fichier = adresse
+
+        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_fichier = {}
+
+        else:
+            # Ouvre la BDD
+            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+                database_fichier = pickle.load(file)
+
+        database_fichier.update(self.__database)
+
+        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database_fichier, file)
 
 
 def bddinterfacecat():

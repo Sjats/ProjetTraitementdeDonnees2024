@@ -132,6 +132,70 @@ class Produit:
         # Return des indices
         return [indices01, indicesfrance]
 
+    def EnregistrementProduit(self, adresse="produits/"):
+        """
+        Fonction qui enregistre les produits dans l'endroit indiqué
+        Parameters
+        ----------
+        adresse : str
+            endroit dans lequel on enregistre les produits
+        """
+
+        if not (isinstance(adresse, str) or adresse is None):
+            raise TypeError("adresse est de type str")
+
+        if not os.path.exists(self.adresse_fichier):
+            raise ValueError("l'adresse fournie n'existe pas")
+
+        if adresse is not None:
+            self.adresse_fichier = adresse
+
+        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_fichier = {}
+
+        else:
+            # Ouvre la BDD
+            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+                database_fichier = pickle.load(file)
+
+        database_fichier.update(self.__database)
+
+        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database_fichier, file)
+
+    def EnregistrementIndicesProduit(self, adresse="indice_produits/"):
+        """
+        Fonction qui enregistre les indice des produits dans l'endroit indiqué
+        Parameters
+        ----------
+        adresse : str
+            endroit dans lequel on enregistre les indices des produits
+        """
+
+        if not (isinstance(adresse, str) or adresse is None):
+            raise TypeError("adresse est de type str")
+
+        if not os.path.exists(self.adresse_fichier):
+            raise ValueError("l'adresse fournie n'existe pas")
+
+        if adresse is not None:
+            self.adresse_fichier = adresse
+
+        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            database_fichier = {}
+
+        else:
+            # Ouvre la BDD
+            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+                database_fichier = pickle.load(file)
+
+        database_fichier.update(self.__database)
+
+        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+            pickle.dump(database_fichier, file)
+
 
 def bddinterfaceprod():
     """Crée la base de données nécessaire à l'interface pour accéder aux
