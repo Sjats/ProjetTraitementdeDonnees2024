@@ -12,8 +12,7 @@ etoiles = "***********************************************"
 class InterfaceAdmin:
     def __init__(self):
         print(etoiles)
-        print("Cette application permet de visualiser des"
-              " données de prix et d'en obtenir")
+        print("Bienvenu dans la section utilisateur")
         print(etoiles)
         self.main_menu()
 
