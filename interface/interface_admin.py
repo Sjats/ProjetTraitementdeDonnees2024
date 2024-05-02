@@ -47,18 +47,30 @@ class InterfaceAdmin:
             with open("donnees/rr_data.pkl", "rb") as file:
                 rr = pickle.load(file)
 
-        print("Nom de la requete, attention si le nom figure "
-              "dans la site suivante,"
-              " les anciennes requetes seront remplacés par les nouvelles.")
+        print("Les sites webs presents dans la Bdd")
         print(rr.keys())
+        print("Attention, si vous rentrez un nom existant dans la base, celui"
+               "ci sera effacé")
+        print("Souhaitez vous ajouter un site web ? ")
+        print("[o] Oui")
+        print("[n] Non")
 
-        nom = str(input)
+        while True:
+            if keyboard.is_pressed('n'):
+                self.menu_recolte()
+
+            if keyboard.is_pressed('y') or keyboard.is_pressed("o"):
+                break
+        time.sleep(0.5)
+
+        nom = str(input())
 
         liste = []
         exit = False
         while True:
+            time.sleep(0.25)
             print("requetes dans " + nom + " : " + str(liste))
-            liste.append(str(input("nom requete à ajouter")))
+            liste.append(str(input(" requete à ajouter ")))
             print("Ajouter en plus ?")
             while True:
                 if keyboard.is_pressed('o'):
