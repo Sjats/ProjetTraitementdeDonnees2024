@@ -1,4 +1,4 @@
-from prix import Prix
+from classes.prix import Prix
 
 
 class Article:
