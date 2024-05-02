@@ -8,7 +8,7 @@ etoiles = "***********************************************"
 "****************************"
 
 
-class Interface:
+class InterfaceAdmin:
     def __init__(self):
         print(etoiles)
         print("Cette application permet de visualiser des"
