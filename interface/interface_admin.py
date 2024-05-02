@@ -44,7 +44,6 @@ class InterfaceAdmin:
     def ajouter_requetes(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
-
         if not os.path.exists("donnees/rr_data.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             rr = {}
@@ -57,7 +56,7 @@ class InterfaceAdmin:
         print("Les sites webs presents dans la Bdd")
         print(rr.keys())
         print("Attention, si vous rentrez un nom existant dans la base, celui"
-               "ci sera effacé")
+              "ci sera effacé")
         print("Souhaitez vous ajouter un site web ? ")
         print("[o] Oui")
         print("[n] Non")
@@ -71,7 +70,7 @@ class InterfaceAdmin:
                 break
         os.system('cls' if os.name == 'nt' else 'clear')
         time.sleep(0.5)
-
+        print("Nom de la requete : ")
         nom = str(input())
 
         liste = []
@@ -103,7 +102,6 @@ class InterfaceAdmin:
         while True:
             if keyboard.is_pressed('n'):
                 self.main_menu()
-
             if keyboard.is_pressed('y') or keyboard.is_pressed("o"):
                 self.ajouter_requetes()
             if keyboard.is_pressed('q'):
@@ -111,6 +109,8 @@ class InterfaceAdmin:
 
     def menu_recolte(self):
         time.sleep(0.5)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
         print(etoiles)
 
         print("[1] Ajouter site web")
@@ -150,7 +150,7 @@ class InterfaceAdmin:
         print("Les sites webs presents dans la Bdd")
         print(rsw.keys())
         print("Attention, si vous rentrez un nom existant dans la base, celui"
-               "ci sera effacé")
+              "ci sera effacé")
         print("Souhaitez vous ajouter un site web ?")
         print("[o] Oui")
         print("[n] Non")
@@ -249,6 +249,8 @@ class InterfaceAdmin:
             choix_sw = str(input())
 
         print(etoiles)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
         print("Quel requete utiliser pour web scraper ?")
         print("Choix possibles : ")
         print(rr.keys())
