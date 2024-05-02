@@ -1,7 +1,7 @@
 import sys
 import os
 import pickle
-from produit import Produit
+from produit import *
 from article import Article
 from prix import Prix
 import numpy as np
@@ -58,6 +58,9 @@ class CategorieProduit:
         self._nom = nom
         self._produits = produits
 
+    def __str__(self):
+        return f'{self._nom}, {self._produits}'
+    
     def _CalculIndicesCategories(self):
         """Calcule les indices associés à la catégorie de produits.
         Les indices sont calculés en fonction des prix moyens des articles par
@@ -144,7 +147,7 @@ class CategorieProduit:
         # Return des indices
         return [indicescat01, indicescatfrance]
 
-    def EnregistrementCategorieProduit(self, adresse="categories/"):
+    def EnregistrementCategorieProduit(self, adresse="donnees/"):
         """
         Fonction qui enregistre les catégories dans l'endroit indiqué
         Parameters
@@ -162,22 +165,21 @@ class CategorieProduit:
         if adresse is not None:
             self.adresse_fichier = adresse
 
-        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+        if not os.path.exists(self.adresse_fichier + "base_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+            with open(self.adresse_fichier + "base_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self.__database)
+        database_fichier.update(self)
 
-        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+        with open(self.adresse_fichier + "base_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-    def EnregistrementIndicesCategorieProduit(self,
-                                              adresse="indice_produits/"):
+    def EnregistrementIndicesCategorieProduit(self, adresse="donnees/"):
         """
         Fonction qui enregistre les indice des catégories dans l'endroit
         indiqué
@@ -197,18 +199,18 @@ class CategorieProduit:
         if adresse is not None:
             self.adresse_fichier = adresse
 
-        if not os.path.exists(self.adresse_fichier + "database.pkl"):
+        if not os.path.exists(self.adresse_fichier + "base_indice_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier + "database.pkl", "rb") as file:
+            with open(self.adresse_fichier + "base_indice_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self.__database)
+        database_fichier.update(self._CalculIndicesCategories)
 
-        with open(self.adresse_fichier + "database.pkl", "wb") as file:
+        with open(self.adresse_fichier + "base_indice_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
 
@@ -230,7 +232,7 @@ def bddinterfacecat():
     indicecat = dict()
     for pays in domaine_a_pays.values():
         indicepays = dict()
-        for cat in [c1]:
+        for cat in categories:
             if pays not in cat._CalculIndicesCategories()[0].keys():
                 indicepays[cat._nom] = np.nan
             else:
@@ -240,6 +242,48 @@ def bddinterfacecat():
                 )
         indicecat[pays] = indicepays
     return indicecat
+
+
+NomsCategories = ['Electronique', 'Mobilier', 'Electromenager_Ustensiles',
+                  'Nourriture']
+
+Electronique = CategorieProduit('Electronique', dict())
+Mobilier = CategorieProduit('Mobilier', dict())
+Electromenager_Ustensiles = CategorieProduit('Electromenager_Ustensiles', dict())
+Nourriture = CategorieProduit('Nourriture', dict())
+
+categories = [Electronique, Mobilier, Electromenager_Ustensiles, Nourriture]
+
+NomsProduitsElectronique = ['Pile', 'Airpods', 'Cable', 'Montre']
+
+NomsProduitsMobilier = ['Lampe', 'Tapis', 'Senteur', 'Etagere', 'Balance']
+
+NomsProduitsUstensile = ['Poele', 'Fer', 'Couteau', 'Brosse a dents',
+                         'Support de Telephone']
+                
+NomsProduitsNourriture = ['Fromage', 'Boeuf', 'Patate', 'Salade', 'Onion',
+                          'Pomme', 'Myrtille', 'Glace', 'Pain', 'Lait', 'Oeuf',
+                          'Yaourt', 'Poulet', 'Poisson', 'Riz', 'Pates',
+                          'Banane', 'Sac_a_dos', 'Filtre a cafe',
+                          'Papier Toilette']
+
+produits = [Pile, Airpods, Cable, Montre, Lampe, Tapis, Senteur, Etagere,
+            Balance, Poele, Fer, Couteau, Kit_de_Survie, Brosse_a_dents,
+            Support_de_Telephone, Fromage, Boeuf, Patate, Salade, Onion, Pomme,
+            Myrtille, Glace, Pain, Lait, Oeuf, Yaourt, Poulet, Poisson, Riz,
+            Pates, Banane, Sac_a_dos, Filtre_a_cafe, Papier_Toilette]
+
+
+def produit_categorie():
+    for prod in produits:
+        if prod._nom in NomsProduitsElectronique:
+            Electronique._produits[prod._nom] = prod
+        elif prod._nom in NomsProduitsMobilier:
+            Mobilier._produits[prod._nom] = prod
+        elif prod._nom in NomsProduitsUstensile:
+            Electromenager_Ustensiles._produits[prod._nom] = prod
+        elif prod._nom in NomsProduitsNourriture:
+            Nourriture._produits[prod._nom] = prod
 
 
 if __name__ == "__main__":
@@ -257,3 +301,6 @@ if __name__ == "__main__":
     c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
     print(c1._CalculIndicesCategories())
     print(bddinterfacecat())
+    produit_categorie()
+    print(categories)
+    print(Nourriture)
