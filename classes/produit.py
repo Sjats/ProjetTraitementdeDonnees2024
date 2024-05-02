@@ -31,27 +31,27 @@ class Produit:
             Un objet Produit initialisé avec le nom et les articles fournis.
         """
         # Vérification des types des arguments
-        if not isinstance(nom, str):
-            raise TypeError("Le nom doit être une instance de str.")
+        # if not isinstance(nom, str):
+        #     raise TypeError("Le nom doit être une instance de str.")
 
-        if not isinstance(articles, dict):
-            raise TypeError(
-                "Les articles doivent être une instance de dictionnaire."
-            )
+        # if not isinstance(articles, dict):
+        #     raise TypeError(
+        #         "Les articles doivent être une instance de dictionnaire."
+        #     )
 
-        for nom_article in articles.keys():
-            if not isinstance(nom_article, str):
-                raise TypeError(
-                    "Les clés du dictionnaire d'articles doivent être une "
-                    "instance de str."
-                )
+        # for nom_article in articles.keys():
+        #     if not isinstance(nom_article, str):
+        #         raise TypeError(
+        #             "Les clés du dictionnaire d'articles doivent être une "
+        #             "instance de str."
+        #         )
 
-        for nom_article in articles.values():
-            if not isinstance(nom_article, Article):
-                raise TypeError(
-                    "Les valeurs du dictionnaire d'articles doivent être une "
-                    "instance d'Article"
-                )
+        # for nom_article in articles.values():
+        #     if not isinstance(nom_article, Article):
+        #         raise TypeError(
+        #             "Les valeurs du dictionnaire d'articles doivent être une "
+        #             "instance d'Article"
+        #         )
 
         # Initialisation des attributs
         self._nom = nom
@@ -93,7 +93,7 @@ class Produit:
             prix_prod_m = 0
             for key2 in self._articles.keys():
                 if self._articles[key]._pays == self._articles[key2]._pays:
-                    prix_prod_m += self._articles[key]._prix.montant
+                    prix_prod_m += self._articles[key]._prix.montant_euros
                     i += 1
             prix_prod_m /= i
             prix_prod[self._articles[key]._pays] = prix_prod_m

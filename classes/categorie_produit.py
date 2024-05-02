@@ -101,7 +101,7 @@ class CategorieProduit:
                 prix_prod_m = 0
                 for key2 in prod._articles.keys():
                     if prod._articles[key]._pays == prod._articles[key2]._pays:
-                        prix_prod_m += prod._articles[key]._prix.montant
+                        prix_prod_m += prod._articles[key]._prix.montant_euros
                         i += 1
                 prix_prod_m /= i
                 prix_prod[prod._articles[key]._pays] = prix_prod_m
