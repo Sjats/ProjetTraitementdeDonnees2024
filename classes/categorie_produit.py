@@ -101,38 +101,51 @@ class CategorieProduit:
                 prix_prod_m = 0
                 for key2 in prod._articles.keys():
                     if prod._articles[key]._pays == prod._articles[key2]._pays:
-                        prix_prod_m += prod._articles[key]._prix.montant_euros
-                        i += 1
-                prix_prod_m /= i
-                prix_prod[prod._articles[key]._pays] = prix_prod_m
+                        if prod._articles[key]._prix.montant is not None :
+                            prix_prod_m += prod._articles[key]._prix.montant
+                            i += 1
+                if i != 0:
+                    prix_prod_m /= i
+                    prix_prod[prod._articles[key]._pays] = prix_prod_m
             for pays in prix_prod.keys():
                 prix_cat[pays] += prix_prod[pays]
                 nombre_cat[pays] += 1
         for pays in prix_cat.keys():
-            prix_cat[pays] /= nombre_cat[pays]
+            if prix_cat[pays] is not None and nombre_cat[pays] is not None:
+                if nombre_cat[pays] != 0:
+                    prix_cat[pays] /= nombre_cat[pays]
 
         # Exclusion des valeurs extrêmes
-        for value in prix_cat.values():
-            L.append(value)
-        q1, q3 = np.percentile(L, 25), np.percentile(L, 75)
-        vai = q1 - (q3-q1)*1.5
-        vas = q3 + (q3-q1)*1.5
-        for keys in prix_cat.keys():
-            if prix_cat[keys] < vai or prix_cat[keys] > vas:
-                prix_cat[keys] = None
-        for value in prix_cat.values():
-            if value is not None:
-                M.append(value)
+            for value in prix_cat.values():
+                if value is not None:
+                    L.append(value)
+            if len(L) > 0:
+                q1, q3 = np.percentile(L, 25), np.percentile(L, 75)
+                vai = q1 - (q3-q1)*1.5
+                vas = q3 + (q3-q1)*1.5
+                for keys in prix_cat.keys():
+                    if prix_cat[keys] is not None :
+                        if prix_cat[keys] < vai or prix_cat[keys] > vas:
+                            prix_cat[keys] = None
+                for value in prix_cat.values():
+                    if value is not None:
+                        M.append(value)
 
         # Définition des variables utiles pour le calcul des indices
-        prix_max = max(M)
-        prix_min = min(M)
-        if prix_cat['France'] is not None:
-            prix_france = prix_cat['France']
+        if len(M) > 0:
+            prix_max = max(M)
+            prix_min = min(M)
+            print(prix_max, prix_min)
+            if prix_cat['France'] is not None:
+                prix_france = prix_cat['France']
+        else :
+            pass
 
         # Calcul de indicescat01
         for pays in prix_cat.keys():
+            print (pays)
             if prix_cat[pays] is not None:
+                print(prix_cat[pays])
                 indcat01 = (prix_cat[pays] - prix_min)
                 indcat01 /= (prix_max - prix_min)
                 indcat01 = round(indcat01, 2)
@@ -214,36 +227,6 @@ class CategorieProduit:
             pickle.dump(database_fichier, file)
 
 
-def bddinterfacecat():
-    """Crée la base de données nécessaire à l'interface pour accéder aux
-    indices des catégories de produits par pays.
-    Cette fonction parcourt les indices des catégories pour chaque pays.
-    Les indices sont stockés dans un dictionnaire de la forme
-    {pays: {catégorie: [indice_01, indice_France]}}.
-
-    Returns
-    -------
-    dict:
-        Un dictionnaire contenant les indices des catégories de produits par
-        pays.
-        Les clés sont les noms des pays et les valeurs sont des dictionnaires
-        contenant les indices des catégories de produits pour ce pays.
-    """
-    indicecat = dict()
-    for pays in domaine_a_pays.values():
-        indicepays = dict()
-        for cat in categories:
-            if pays not in cat._CalculIndicesCategories()[0].keys():
-                indicepays[cat._nom] = np.nan
-            else:
-                indicepays[cat._nom] = (
-                    [cat._CalculIndicesCategories()[0][pays],
-                     cat._CalculIndicesCategories()[1][pays]]
-                )
-        indicecat[pays] = indicepays
-    return indicecat
-
-
 NomsCategories = ['Electronique', 'Mobilier', 'Electromenager_Ustensiles',
                   'Nourriture']
 
@@ -286,21 +269,51 @@ def produit_categorie():
             Nourriture._produits[prod._nom] = prod
 
 
+def bddinterfacecat():
+    """Crée la base de données nécessaire à l'interface pour accéder aux
+    indices des catégories de produits par pays.
+    Cette fonction parcourt les indices des catégories pour chaque pays.
+    Les indices sont stockés dans un dictionnaire de la forme
+    {pays: {catégorie: [indice_01, indice_France]}}.
+
+    Returns
+    -------
+    dict:
+        Un dictionnaire contenant les indices des catégories de produits par
+        pays.
+        Les clés sont les noms des pays et les valeurs sont des dictionnaires
+        contenant les indices des catégories de produits pour ce pays.
+    """
+    indicecat = dict()
+    for pays in Pays:
+        indicepays = dict()
+        for cat in categories:
+            if pays not in cat._CalculIndicesCategories()[0].keys():
+                indicepays[cat._nom] = np.nan
+            else:
+                indicepays[cat._nom] = (
+                    [cat._CalculIndicesCategories()[0][pays],
+                     cat._CalculIndicesCategories()[1][pays]]
+                )
+        indicecat[pays] = indicepays
+    return indicecat
+
+
 if __name__ == "__main__":
     # Ca sera pour les tests
-    p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-                         "riz2": Article("002", Prix('EUR', 20), "Spain"),
-                         "riz3": Article("003", Prix('EUR', 25), "Germany"),
-                         "riz4": Article("004", Prix('EUR', 30), "Italy")})
-    p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
-                         "pat2": Article("102", Prix('EUR', 25), "Spain"),
-                         "pat3": Article("103", Prix('EUR', 15), "Germany"),
-                         "pat4": Article("104", Prix('EUR', 20), "Italy")})
-    print(p1._CalculIndicesProduit())
-    print(p2._CalculIndicesProduit())
-    c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
-    print(c1._CalculIndicesCategories())
-    print(bddinterfacecat())
+    # p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
+    #                      "riz2": Article("002", Prix('EUR', 20), "Spain"),
+    #                      "riz3": Article("003", Prix('EUR', 25), "Germany"),
+    #                      "riz4": Article("004", Prix('EUR', 30), "Italy")})
+    # p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
+    #                      "pat2": Article("102", Prix('EUR', 25), "Spain"),
+    #                      "pat3": Article("103", Prix('EUR', 15), "Germany"),
+    #                      "pat4": Article("104", Prix('EUR', 20), "Italy")})
+    # print(p1._CalculIndicesProduit())
+    # print(p2._CalculIndicesProduit())
+    # c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
+    # print(c1._CalculIndicesCategories())
     produit_categorie()
-    print(categories)
-    print(Nourriture)
+    print(Nourriture._CalculIndicesCategories())
+    print(bddinterfacecat())
+    

@@ -57,82 +57,81 @@ class Produit:
         self._nom = nom
         self._articles = articles
 
-    def __str__(self):
-        return f'{self._nom} et {self._articles}'
-
-
     def _CalculIndicesProduit(self):
-        """Calcule les indices associés au produit, à savoir indices01 et
-        indicesfrance.
+        """Calcule les indices associés aux produits.
         Les indices sont calculés en fonction des prix moyens des articles par
         pays.
 
         Returns
         -------
-        list
+        list:
             Une liste contenant deux dictionnaires :
-            indices01 (dict) : Un dictionnaire des indices 0-1 par pays,
-                               où les clés sont les noms des pays et les
-                               valeurs sont les indices calculés.
-            indicesfrance (dict) : Un dictionnaire des indices par rapport au
-                                   prix en France par pays, où les clés sont
-                                   les noms des pays et les valeurs sont les
-                                   indices calculés.
+            indices01 (dict) : Un dictionnaire des indices 0-1 par pays pour
+                                  leproduits, où les clés sont les noms des
+                                  pays et les valeurs sont les indices
+                                  calculés.
+            indicesfrance (dict) : Un dictionnaire des indices par rapport
+                                      au prix en France par pays pour le
+                                      produit, où les clés sont les noms des
+                                      pays et les valeurs sont les indices
+                                      calculés.
         """
         # Initialisation des variables de stock
         indices01 = dict()
         indicesfrance = dict()
         prix_prod = dict()
-        L = []
-        M = []
+        L = []  # Liste pour stocker les prix moyens par pays
 
         # Calcul du prix moyen par pays
-        # et stock dans prix_prod : dict(pays, prix_moyen)
         for key in self._articles.keys():
             i = 0
             prix_prod_m = 0
             for key2 in self._articles.keys():
                 if self._articles[key]._pays == self._articles[key2]._pays:
-                    prix_prod_m += self._articles[key]._prix.montant_euros
-                    i += 1
-            prix_prod_m /= i
-            prix_prod[self._articles[key]._pays] = prix_prod_m
+                    if self._articles[key]._prix.montant is not None:
+                        prix_prod_m += self._articles[key]._prix.montant
+                        i += 1
+            if i != 0:
+                prix_prod_m /= i
+                prix_prod[self._articles[key]._pays] = prix_prod_m
+                L.append(prix_prod_m)
 
         # Exclusion des valeurs extrêmes
-        for value in prix_prod.values():
-            L.append(value)
-        q1, q3 = np.percentile(L, 25), np.percentile(L, 75)
-        vai = q1 - (q3-q1)*1.5
-        vas = q3 + (q3-q1)*1.5
-        for keys in prix_prod.keys():
-            if prix_prod[keys] < vai or prix_prod[keys] > vas:
-                prix_prod[keys] = None
-        for value in prix_prod.values():
-            if value is not None:
-                M.append(value)
+        if len(L) > 0:
+            q1, q3 = np.percentile(L, 25), np.percentile(L, 75)
+            vai = q1 - (q3 - q1) * 1.5
+            vas = q3 + (q3 - q1) * 1.5
+            M = [value for value in L if vai <= value <= vas]
+        else:
+            M = []
 
-        # Définition des variables utiles pour le calcul des indices
-        prix_max = max(M)
-        prix_min = min(M)
-        if prix_prod['France'] is not None:
-            prix_france = prix_prod['France']
-
+        # Calcul des indices seulement si M contient des valeurs
+        if len(M) > 0:
+            prix_max = max(M)
+            prix_min = min(M)
+            if prix_prod['France'] is not None:
+                prix_france = prix_prod['France']
+            
         # Calcul de indices01
         for key in self._articles.keys():
-            if prix_prod[self._articles[key]._pays] is not None:
-                ind01 = (prix_prod[self._articles[key]._pays] - prix_min)
-                ind01 /= (prix_max - prix_min)
-                ind01 = round(ind01, 2)
-                indices01[self._articles[key]._pays] = ind01
+            if self._articles[key]._pays in prix_prod:
+                if prix_prod[self._articles[key]._pays] is not None:
+                    ind01 = (prix_prod[self._articles[key]._pays] - prix_min)
+                    ind01 /= (prix_max - prix_min)
+                    ind01 = round(ind01, 2)
+                    indices01[self._articles[key]._pays] = ind01
+            else:
+                pass
 
         # Calcul de indicesfrance
         for key in self._articles.keys():
-            if prix_prod[self._articles[key]._pays] is not None:
-                indfrance = round(
-                    prix_prod[self._articles[key]._pays] / prix_france,
-                    2
-                    )
-                indicesfrance[self._articles[key]._pays] = indfrance
+            if self._articles[key]._pays in prix_prod:
+                if prix_prod[self._articles[key]._pays] is not None:
+                    indfrance = round(
+                        prix_prod[self._articles[key]._pays] / prix_france,
+                        2
+                        )
+                    indicesfrance[self._articles[key]._pays] = indfrance
 
         # Return des indices
         return [indices01, indicesfrance]
@@ -149,7 +148,7 @@ class Produit:
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
 
-        if not os.path.exists(self.adresse_fichier):
+        if not os.path.exists(adresse):
             raise ValueError("l'adresse fournie n'existe pas")
 
         if adresse is not None:
@@ -265,6 +264,12 @@ NomsArticles = ['AA+alkaline+battery+pack', 'Bluetooth+wireless+earbuds',
                 'Paper coffee filters', 'Biodegradable toilet paper']
 
 
+Pays = ['United States', 'Singapore', 'Netherlands', 'Canada', 'Germany',
+        'Spain', 'Sweden', 'Poland', 'Japan', 'Australia', 'Brazil', 'Turkey',
+        'Mexico', 'United Kingdom', 'France', 'Italy', 'United Arab Emirates',
+        'India', 'China', 'Russia']
+
+
 def article_produit():
     with open("donnees/database.pkl", "rb") as file:
         dict_articles = pickle.load(file)
@@ -275,9 +280,6 @@ def article_produit():
 
 
 article_produit()
-
-for prod in produits:
-    prod.EnregistrementProduit
 
 
 def bddinterfaceprod():
@@ -295,7 +297,7 @@ def bddinterfaceprod():
         contenant les indices des produits pour ce pays.
     """
     indiceprod = dict()
-    for pays in domaine_a_pays.values():
+    for pays in Pays:
         indicepays = dict()
         for prod in produits:
             if pays not in prod._CalculIndicesProduit()[0].keys():
@@ -322,5 +324,8 @@ if __name__ == "__main__":
     print(p1._nom)
     print(p1._CalculIndicesProduit())
     print(p2._CalculIndicesProduit())
+    # for produit in produits:
+    #     for article in produit._articles.values():
+    #         print(article._prix.montant)
     print(bddinterfaceprod())
     print(article_produit())
