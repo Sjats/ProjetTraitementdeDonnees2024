@@ -116,8 +116,19 @@ class InterfaceAdmin:
 
     def ajouter_sw(self):
         time.sleep(0.5)
+        if not os.path.exists("donnees/rsw_data.pkl"):
+            # Cree un dictionnaire vide si le fichier n'existe pas
+            rsw = {}
+
+        else:
+            # Ouvre la BDD
+            with open("donnees/rsw_data.pkl", "rb") as file:
+                rsw = pickle.load(file)
         print(etoiles)
-        print()  # sites webs
+        print("Les sites webs presents dans la Bdd")
+        print(rsw.keys())
+        print("Attention, si vous rentrez un nom existant dans la base, celui"
+               "ci sera effacé")
         print("Souhaitez vous ajouter un site web ?")
         print("[o] Oui")
         print("[n] Non")
@@ -161,15 +172,6 @@ class InterfaceAdmin:
                     "_pays": pays,
                     "_scraping_type": scraping_type,
                     "requete": []}
-
-        if not os.path.exists("donnees/rsw_data.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            rsw = {}
-
-        else:
-            # Ouvre la BDD
-            with open("donnees/rsw_data.pkl", "rb") as file:
-                rsw = pickle.load(file)
 
         rsw.update({nom: dictsite})
 
