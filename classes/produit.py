@@ -39,15 +39,15 @@ class Produit:
                 "Les articles doivent être une instance de dictionnaire."
             )
 
-        for nom in articles.keys():
-            if not isinstance(nom, str):
+        for nom_article in articles.keys():
+            if not isinstance(nom_article, str):
                 raise TypeError(
                     "Les clés du dictionnaire d'articles doivent être une "
                     "instance de str."
                 )
 
-        for article in articles.values():
-            if not isinstance(article, Article):
+        for nom_article in articles.values():
+            if not isinstance(nom_article, Article):
                 raise TypeError(
                     "Les valeurs du dictionnaire d'articles doivent être une "
                     "instance d'Article"
@@ -89,7 +89,7 @@ class Produit:
             prix_prod_m = 0
             for key2 in self._articles.keys():
                 if self._articles[key]._pays == self._articles[key2]._pays:
-                    prix_prod_m += self._articles[key]._prix._ConversionEuros()
+                    prix_prod_m += self._articles[key]._prix.montant
                     i += 1
             prix_prod_m /= i
             prix_prod[self._articles[key]._pays] = prix_prod_m
@@ -232,10 +232,12 @@ if __name__ == "__main__":
     p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
                          "riz2": Article("002", Prix('EUR', 20), "Spain"),
                          "riz3": Article("003", Prix('EUR', 40), "Germany"),
-                         "riz4": Article("004", Prix('USD', 30), "Italy")})
+                         "riz4": Article("004", Prix('EUR', 30), "Italy")})
     p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
                          "pat2": Article("102", Prix('EUR', 25), "Spain"),
                          "pat3": Article("103", Prix('EUR', 15), "Germany"),
-                         "pat4": Article("104", Prix('USD', 27), "Italy")})
+                         "pat4": Article("104", Prix('EUR', 27), "Italy")})
+    print(p1._nom)
     print(p1._CalculIndicesProduit())
     print(p2._CalculIndicesProduit())
+    print(bddinterfaceprod())
