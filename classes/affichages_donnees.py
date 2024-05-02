@@ -191,7 +191,7 @@ class AffichageDonnees:
             mon_dict = self._indices_categorie_produit
         else :
             mon_dict = self._indices_produits
-        chemin_geojson = 'world_country_boundaries.geojson.json'
+        chemin_geojson = 'donnees/world_country_boundaries.geojson.json'
         gdf = gpd.read_file(chemin_geojson) # Chemin vers le fichier GeoJSON
 
         country_code_map = {country.alpha_2: country.name for country in pycountry.countries}
