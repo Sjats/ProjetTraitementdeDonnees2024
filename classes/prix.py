@@ -13,20 +13,15 @@ class Prix:
         montant : float
             quanité du montant
         """
-        # Devises = []
         if not isinstance(devise, str):
             raise TypeError("devise doit être de type str")
 
-        # if devise not in Devises:
-        #    raise ValueError("La devise fournie n'est "
-        #                     "pas homologuée dans ISO 4217")
-
         if not (isinstance(montant, float) or montant is None
                 or isinstance(montant, int)):
-            print(montant, type(montant))
+            # print(montant, type(montant))
             raise TypeError("montant doit être de "
                             "type float ou None")
-        print(montant)
+        # print(montant)
 
         self.devise = devise
         self.montant = montant
