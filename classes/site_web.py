@@ -60,8 +60,9 @@ class SiteWeb:
                         "DNT": "1", "Connection": "close",
                         "Upgrade-Insecure-Requests": "1"}
 
-    def recherche_articles(self):
-
+    def recherche_articles(self, requete):
+        if requete is not None:
+            self.requete = requete
         self.urls_articles = []
         self.__database = {}
 
