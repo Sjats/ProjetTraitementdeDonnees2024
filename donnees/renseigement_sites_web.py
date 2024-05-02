@@ -1,3 +1,5 @@
+import pickle
+
 requete_amazon = [
     "Coffee+maker",
     "AA+alkaline+battery+pack",
@@ -243,3 +245,11 @@ configurations_sites = {
         "_scraping_type": "Normal"
     },
 }
+requetes = {"varié": requete_amazon,
+            "alimentaire": requete_supermarche,
+            "vitamines": requete_iherb}
+
+with open("donnees/rsw_data.pkl", "wb") as file:
+    pickle.dump(configurations_sites, file)
+with open("donnees/rr_data.pkl", "wb") as file:
+    pickle.dump(requetes, file)

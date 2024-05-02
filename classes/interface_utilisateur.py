@@ -261,8 +261,8 @@ produits_test = {
                 'Tapis de yoga antidérapant': [70, 75, 80, 50]
             }}
 
-mon_test = InterfaceUtilisateur(produits_test, categories_test )
+mon_test = InterfaceUtilisateur(produits_test, categories_test)
 
 # ne pas executer les deux en même temps
-mon_test.plot_histogramme(False)
-# mon_test.AfficherCarte(False)
+#mon_test.plot_histogramme(False)
+mon_test.AfficherCarte(False)
