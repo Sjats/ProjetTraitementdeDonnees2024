@@ -1,5 +1,6 @@
 import sys
 import os
+import pickle
 from article import Article
 from prix import Prix
 import numpy as np
@@ -88,7 +89,7 @@ class Produit:
             prix_prod_m = 0
             for key2 in self._articles.keys():
                 if self._articles[key]._pays == self._articles[key2]._pays:
-                    prix_prod_m += self._articles[key]._prix.montant_euros
+                    prix_prod_m += self._articles[key]._prix._ConversionEuros()
                     i += 1
             prix_prod_m /= i
             prix_prod[self._articles[key]._pays] = prix_prod_m
