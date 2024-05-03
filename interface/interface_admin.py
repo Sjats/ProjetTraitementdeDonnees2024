@@ -27,7 +27,7 @@ class InterfaceAdmin:
         while True:
             if keyboard.is_pressed('q'):
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print('Quitter')
+                print("Au revoir")
                 break
             if keyboard.is_pressed('1'):
                 os.system('cls' if os.name == 'nt' else 'clear')
@@ -105,6 +105,7 @@ class InterfaceAdmin:
             if keyboard.is_pressed('y') or keyboard.is_pressed("o"):
                 self.ajouter_requetes()
             if keyboard.is_pressed('q'):
+                print("Au revoir")
                 break
 
     def menu_recolte(self):
@@ -121,7 +122,7 @@ class InterfaceAdmin:
 
         while True:
             if keyboard.is_pressed('q'):
-                print('Quitter')
+                print("Au revoir")
                 break
             if keyboard.is_pressed('space'):
                 self.main_menu()
@@ -221,7 +222,7 @@ class InterfaceAdmin:
                 self.ajouter_sw()
             if keyboard.is_pressed('q'):
                 os.system('cls' if os.name == 'nt' else 'clear')
-                print("Quitter")
+                print("Au revoir")
                 break
 
     def lancer_web_scraping(self):
