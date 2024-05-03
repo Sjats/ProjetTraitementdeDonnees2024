@@ -1,10 +1,11 @@
+import sys
 import os
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 import pickle
 from classes.article import Article
-from classes.prix import Prix
 import numpy as np
-
-
 
 
 class Produit:
@@ -12,18 +13,15 @@ class Produit:
         """Initialise un objet Produit avec un nom et un dictionnaire
         d'articles.
 
-
         Parameters
         ----------
         nom : str
             Le nom du produit.
 
-
         articles : dict[str, Article]
             Un dictionnaire contenant des articles associés au produit,
             où les clés sont les noms des articles et les valeurs sont
             des objets Article.
-
 
         Returns
         -------
@@ -34,12 +32,10 @@ class Produit:
         # if not isinstance(nom, str):
         #     raise TypeError("Le nom doit être une instance de str.")
 
-
         # if not isinstance(articles, dict):
         #     raise TypeError(
         #         "Les articles doivent être une instance de dictionnaire."
         #     )
-
 
         # for nom_article in articles.keys():
         #     if not isinstance(nom_article, str):
@@ -48,7 +44,6 @@ class Produit:
         #             "instance de str."
         #         )
 
-
         # for nom_article in articles.values():
         #     if not isinstance(nom_article, Article):
         #         raise TypeError(
@@ -56,17 +51,14 @@ class Produit:
         #             "une instance d'Article"
         #         )
 
-
         # Initialisation des attributs
         self._nom = nom
         self._articles = articles
-
 
     def _CalculIndicesProduit(self):
         """Calcule les indices associés aux produits.
         Les indices sont calculés en fonction des prix moyens des articles par
         pays.
-
 
         Returns
         -------
@@ -88,7 +80,6 @@ class Produit:
         prix_prod = dict()
         L = []  # Liste pour stocker les prix moyens par pays
 
-
         # Calcul du prix moyen par pays
         for key in self._articles.keys():
             i = 0
@@ -103,7 +94,6 @@ class Produit:
                 prix_prod[self._articles[key]._pays] = prix_prod_m
                 L.append(prix_prod_m)
 
-
         # Exclusion des valeurs extrêmes
         if len(L) > 0:
             q1, q3 = np.percentile(L, 25), np.percentile(L, 75)
@@ -113,7 +103,6 @@ class Produit:
         else:
             M = []
 
-
         # Calcul des indices seulement si M contient des valeurs
         if len(M) > 0:
             prix_max = max(M)
@@ -121,13 +110,14 @@ class Produit:
             if prix_prod['France'] is not None:
                 prix_france = prix_prod['France']
 
-
         # Calcul de indices01
         for key in self._articles.keys():
             if self._articles[key]._pays in prix_prod:
                 if prix_prod[self._articles[key]._pays] is not None:
                     if prix_prod[self._articles[key]._pays] in M:
-                        ind01 = (prix_prod[self._articles[key]._pays] - prix_min)
+                        ind01 = (
+                            prix_prod[self._articles[key]._pays] - prix_min
+                            )
                         ind01 /= (prix_max - prix_min)
                         ind01 = round(ind01, 2)
                         indices01[self._articles[key]._pays] = ind01
@@ -135,7 +125,6 @@ class Produit:
                         pass
             else:
                 pass
-
 
         # Calcul de indicesfrance
         for key in self._articles.keys():
@@ -150,10 +139,8 @@ class Produit:
                     else:
                         pass
 
-
         # Return des indices
         return [indices01, indicesfrance]
-
 
     def EnregistrementProduit(self, adresse="donnees/"):
         """
@@ -164,36 +151,28 @@ class Produit:
             endroit dans lequel on enregistre les produits
         """
 
-
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
-
 
         if not os.path.exists(adresse):
             raise ValueError("l'adresse fournie n'existe pas")
 
-
         if adresse is not None:
             self.adresse_fichier = adresse
 
-
         if not os.path.exists(self.adresse_fichier + "base_produit.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = {}
-
+            database_fichier = dict()
 
         else:
             # Ouvre la BDD
             with open(self.adresse_fichier + "base_produit.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-
         database_fichier.update(self)
-
 
         with open(self.adresse_fichier + "base_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
 
     def EnregistrementIndicesProduit(self, adresse="donnees/"):
         """
@@ -204,24 +183,19 @@ class Produit:
             endroit dans lequel on enregistre les indices des produits
         """
 
-
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
-
 
         if not os.path.exists(self.adresse_fichier):
             raise ValueError("l'adresse fournie n'existe pas")
 
-
         if adresse is not None:
             self.adresse_fichier = adresse
-
 
         if not os.path.exists(self.adresse_fichier +
                               "base_indice_produit.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
-
 
         else:
             # Ouvre la BDD
@@ -229,15 +203,11 @@ class Produit:
                       "base_indice_produit.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-
         database_fichier.update(self._CalculIndicesProduit)
-
 
         with open(self.adresse_fichier +
                   "base_indice_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
-
 
 
 NomsProduits = ['Pile', 'Airpods', 'Cable', 'Montre', 'Lampe', 'Tapis',
@@ -306,14 +276,10 @@ NomsArticles = ['AA+alkaline+battery+pack', 'Bluetooth+wireless+earbuds',
                 'Paper coffee filters', 'Biodegradable toilet paper']
 
 
-
-
 Pays = ['United States', 'Singapore', 'Netherlands', 'Canada', 'Germany',
         'Spain', 'Sweden', 'Poland', 'Japan', 'Australia', 'Brazil', 'Turkey',
         'Mexico', 'United Kingdom', 'France', 'Italy', 'United Arab Emirates',
         'India', 'China', 'Russia']
-
-
 
 
 def article_produit():
@@ -325,11 +291,7 @@ def article_produit():
                 produits[i]._articles[art] = dict_articles[art]
 
 
-
-
 article_produit()
-
-
 
 
 def bddinterfaceprod():
@@ -338,7 +300,6 @@ def bddinterfaceprod():
     Cette fonction parcourt les indices des produits pour chaque pays.
     Les indices sont stockés dans un dictionnaire de la forme
     {pays: {produit: [indice_01, indice_France]}}.
-
 
     Returns
     -------
@@ -360,25 +321,3 @@ def bddinterfaceprod():
                 )
         indiceprod[pays] = indicepays
     return indiceprod
-
-
-
-
-if __name__ == "__main__":
-    # Ca sera pour les tests
-    p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-                         "riz2": Article("002", Prix('EUR', 20), "Spain"),
-                         "riz3": Article("003", Prix('EUR', 40), "Germany"),
-                         "riz4": Article("004", Prix('EUR', 30), "Italy")})
-    p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
-                         "pat2": Article("102", Prix('EUR', 25), "Spain"),
-                         "pat3": Article("103", Prix('EUR', 15), "Germany"),
-                         "pat4": Article("104", Prix('EUR', 27), "Italy")})
-    print(p1._nom)
-    print(p1._CalculIndicesProduit())
-    print(p2._CalculIndicesProduit())
-    # for produit in produits:
-    #     for article in produit._articles.values():
-    #         print(article._prix.montant)
-    print(bddinterfaceprod())
-    print(article_produit())

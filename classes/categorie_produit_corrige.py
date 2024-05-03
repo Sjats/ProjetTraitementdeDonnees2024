@@ -1,16 +1,13 @@
 import os
 import pickle
-from classes.produit import *
+from classes.produit_corrige import *
 import numpy as np
-
-
 
 
 class CategorieProduit:
     def __init__(self, nom: str, produits: dict[str, Produit]):
         """Initialise un objet CategorieProduit avec un nom et un dictionnaire
         de produits associés.
-
 
         Parameters
         ----------
@@ -20,7 +17,6 @@ class CategorieProduit:
             Un dictionnaire contenant des produits associés à la catégorie,
             où les clés sont les noms des produits et les valeurs sont des
             objets Produit.
-
 
         Returns
         -------
@@ -32,12 +28,10 @@ class CategorieProduit:
         if not isinstance(nom, str):
             raise TypeError("Le nom doit être une instance de str.")
 
-
         if not isinstance(produits, dict):
             raise TypeError(
                 "Les produits doivent être une instance de dictionnaire."
             )
-
 
         for produit_nom in produits.keys():
             if not isinstance(produit_nom, str):
@@ -46,7 +40,6 @@ class CategorieProduit:
                     "instance de str."
                 )
 
-
         for produit in produits.values():
             if not isinstance(produit, Produit):
                 raise TypeError(
@@ -54,21 +47,14 @@ class CategorieProduit:
                     "instance de Produit"
                 )
 
-
         # Initialisation des attributs
         self._nom = nom
         self._produits = produits
-
-
-    def __str__(self):
-        return f'{self._nom}, {self._produits}'
-
 
     def _CalculIndicesCategories(self):
         """Calcule les indices associés à la catégorie de produits.
         Les indices sont calculés en fonction des prix moyens des articles par
         pays pour tous les produits de la catégorie.
-
 
         Returns
         -------
@@ -96,7 +82,6 @@ class CategorieProduit:
                 prix_cat[article._pays] = 0
                 nombre_cat[article._pays] = 0
 
-
         for prod in self._produits.values():
             prix_prod = dict()
             # Calcul du prix moyen par pays
@@ -120,7 +105,6 @@ class CategorieProduit:
                 if nombre_cat[pays] != 0:
                     prix_cat[pays] /= nombre_cat[pays]
 
-
         # Exclusion des valeurs extrêmes
             for value in prix_cat.values():
                 if value is not None:
@@ -137,7 +121,6 @@ class CategorieProduit:
                     if value is not None:
                         M.append(value)
 
-
         # Définition des variables utiles pour le calcul des indices
         if len(M) > 0:
             prix_max = max(M)
@@ -146,7 +129,6 @@ class CategorieProduit:
                 prix_france = prix_cat['France']
         else:
             pass
-
 
         # Calcul de indicescat01
         for pays in prix_cat.keys():
@@ -159,7 +141,6 @@ class CategorieProduit:
                 else:
                     pass
 
-
         # Calcul de indicescatfrance
         for pays in prix_cat.keys():
             if prix_cat[pays] is not None:
@@ -169,37 +150,31 @@ class CategorieProduit:
                 else:
                     pass
 
-
         # Return des indices
         return [indicescat01, indicescatfrance]
-
 
     def EnregistrementCategorieProduit(self, adresse="donnees/"):
         """
         Fonction qui enregistre les catégories dans l'endroit indiqué
+
         Parameters
         ----------
         adresse : str
             endroit dans lequel on enregistre les catégories
         """
 
-
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
-
 
         if not os.path.exists(self.adresse_fichier):
             raise ValueError("l'adresse fournie n'existe pas")
 
-
         if adresse is not None:
             self.adresse_fichier = adresse
 
-
         if not os.path.exists(self.adresse_fichier + "base_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = {}
-
+            database_fichier = dict()
 
         else:
             # Ouvre la BDD
@@ -207,19 +182,15 @@ class CategorieProduit:
                       "base_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-
         database_fichier.update(self)
-
 
         with open(self.adresse_fichier + "base_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
 
     def EnregistrementIndicesCategorieProduit(self, adresse="donnees/"):
         """
         Fonction qui enregistre les indice des catégories dans l'endroit
         indiqué
-
 
         Parameters
         ----------
@@ -227,24 +198,19 @@ class CategorieProduit:
             endroit dans lequel on enregistre les indices des catégories
         """
 
-
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
-
 
         if not os.path.exists(self.adresse_fichier):
             raise ValueError("l'adresse fournie n'existe pas")
 
-
         if adresse is not None:
             self.adresse_fichier = adresse
-
 
         if not os.path.exists(self.adresse_fichier +
                               "base_indice_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
-
 
         else:
             # Ouvre la BDD
@@ -252,15 +218,11 @@ class CategorieProduit:
                       "base_indice_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-
         database_fichier.update(self._CalculIndicesCategories)
-
 
         with open(self.adresse_fichier +
                   "base_indice_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
-
 
 
 NomsCategories = ['Electronique', 'Mobilier', 'Electromenager_Ustensiles',
@@ -301,8 +263,6 @@ produits = [Pile, Airpods, Cable, Montre, Lampe, Tapis, Senteur, Etagere,
             Pates, Banane, Sac_a_dos, Filtre_a_cafe, Papier_Toilette]
 
 
-
-
 def produit_categorie():
     for prod in produits:
         if prod._nom in NomsProduitsElectronique:
@@ -315,11 +275,7 @@ def produit_categorie():
             Nourriture._produits[prod._nom] = prod
 
 
-
-
 produit_categorie()
-
-
 
 
 def bddinterfacecat():
@@ -328,7 +284,6 @@ def bddinterfacecat():
     Cette fonction parcourt les indices des catégories pour chaque pays.
     Les indices sont stockés dans un dictionnaire de la forme
     {pays: {catégorie: [indice_01, indice_France]}}.
-
 
     Returns
     -------
@@ -351,24 +306,3 @@ def bddinterfacecat():
                 )
         indicecat[pays] = indicepays
     return indicecat
-
-
-
-
-if __name__ == "__main__":
-    # Ca sera pour les tests
-    # p1 = Produit("riz", {"riz1": Article('001', Prix('EUR', 10), "France"),
-    #                      "riz2": Article("002", Prix('EUR', 20), "Spain"),
-    #                      "riz3": Article("003", Prix('EUR', 25), "Germany"),
-    #                      "riz4": Article("004", Prix('EUR', 30), "Italy")})
-    # p2 = Produit("pat", {"pat1": Article('101', Prix('EUR', 35), "France"),
-    #                      "pat2": Article("102", Prix('EUR', 25), "Spain"),
-    #                      "pat3": Article("103", Prix('EUR', 15), "Germany"),
-    #                      "pat4": Article("104", Prix('EUR', 20), "Italy")})
-    # print(p1._CalculIndicesProduit())
-    # print(p2._CalculIndicesProduit())
-    # c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
-    # print(c1._CalculIndicesCategories())
-    # produit_categorie()
-    # print(Nourriture._CalculIndicesCategories())
-    print(bddinterfacecat())
