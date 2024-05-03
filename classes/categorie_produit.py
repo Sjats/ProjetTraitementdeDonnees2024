@@ -2,6 +2,7 @@ import os
 import pickle
 import numpy as np
 from classes.produit import Produit
+from classes.prix import Prix
 
 
 class CategorieProduit:
@@ -94,7 +95,11 @@ class CategorieProduit:
                 for key2 in prod._articles.keys():
                     if prod._articles[key]._pays == prod._articles[key2]._pays:
                         if prod._articles[key]._prix.montant is not None:
-                            prix_prod_m += prod._articles[key]._prix.montant
+                            prod._articles[key]._prix = Prix(
+                                prod._articles[key]._prix.devise,
+                                prod._articles[key]._prix.montant)
+                            prix_prod_m += (
+                                prod._articles[key]._prix.montant_euros)
                             i += 1
                 if i != 0:
                     prix_prod_m /= i

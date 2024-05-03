@@ -31,7 +31,7 @@ class Prix:
         else:
             self.montant_euros = self.montant
 
-    def _ConversionEuros(self):
+    def _ConversionEuros(self, offline=True):
         """
         Fonction qui calcul le montant en euros
 
@@ -40,7 +40,15 @@ class Prix:
         montant_euros : float
             quanité eqivalente du montant en euros
         """
-        self.montant_euros = self.__ObtientTauxChange() * self.montant
+        if offline:
+            taux = {'USD': 0.9308, 'SGD': 0.6882, 'EUR': 1.0, 'CAD': 0.6813,
+                    'SEK': 0.0858, 'PLN': 0.231, 'JPY': 0.0061, 'AUD': 0.6127,
+                    'BRL': 0.1821, 'TRY': 0.0289, 'MXN': 0.0549, 'GBP': 1.1691,
+                    'AED': 0.2534, 'INR': 0.0112, 'CNY': 0.1293, 'RUB': 0.0102}
+            self.montant_euros = taux[self.devise] * self.montant
+        else:
+
+            self.montant_euros = self.__ObtientTauxChange() * self.montant
         return self.montant_euros
 
     def __str__(self) -> str:
