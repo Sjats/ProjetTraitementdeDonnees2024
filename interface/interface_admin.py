@@ -126,15 +126,19 @@ class InterfaceAdmin:
                 print("Au revoir")
                 break
             if keyboard.is_pressed('space'):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.main_menu()
 
             if keyboard.is_pressed('1'):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.ajouter_sw()
 
             if keyboard.is_pressed("2"):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.ajouter_requetes()
 
             if keyboard.is_pressed("3"):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.lancer_web_scraping()
 
             if keyboard.is_pressed("4"):

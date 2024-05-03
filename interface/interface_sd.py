@@ -45,6 +45,7 @@ class InterfaceSd:
         afficheur = AffichageDonnees(ind_prod, ind_cat)
         os.system('cls' if os.name == 'nt' else 'clear')
         print(etoiles)
+        time.sleep(0.25)
         print("Type d'affichage")
         print("[1] Carte")
         print("[2] Histogramme")
@@ -61,7 +62,9 @@ class InterfaceSd:
                 afficheur.plot_histogramme(var_af, self.main_menu)
                 return  # Sortir de cette boucle
             if keyboard.is_pressed("q"):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 print("Au revoir")
                 break
             if keyboard.is_pressed("space"):
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.main_menu()
