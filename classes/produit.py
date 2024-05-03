@@ -1,6 +1,7 @@
 import os
 import pickle
 from classes.article import Article
+from classes.prix import Prix
 import numpy as np
 
 
@@ -84,6 +85,10 @@ class Produit:
             for key2 in self._articles.keys():
                 if self._articles[key]._pays == self._articles[key2]._pays:
                     if self._articles[key]._prix.montant is not None:
+                        self._articles[key]._prix = Prix(
+                            self._articles[key]._prix.montant,
+                            self._articles[key]._prix.devise)
+                        #Exemple Marius
                         prix_prod_m += self._articles[key]._prix.montant
                         i += 1
             if i != 0:
