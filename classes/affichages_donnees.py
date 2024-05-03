@@ -112,19 +112,24 @@ class AffichageDonnees:
         else :
             mon_dict = self._indices_produits
 
-        indices = ["indice_marius1", "indice_marius2", "indice_marius3", "indice_marius4"]
+        indices = ["indice01", "indicefrance"]
         categories_ou_produit = list(mon_dict['France'].keys())
 
-        def tracer_histogramme(index_selectionne, categorie_ou_produit_selectionnee,indices):
+        def tracer_histogramme(index_selectionne, categorie_ou_produit_selectionnee, indices):
             """
             Crée l'histogramme pour un indice et une catégorie précise
             déjà sélectionnée.
             """
+            print(index_selectionne, categorie_ou_produit_selectionnee,indices)
             plt.clf()  # Effacer le tracé précédent
             index_selectionne_num = indices.index(index_selectionne)
+            print(index_selectionne_num)
             indices = []
             for k in mon_dict.values():
-                indices.append(k[categorie_ou_produit_selectionnee][index_selectionne_num])
+                if k[categorie_ou_produit_selectionnee] is not np.nan:
+                    indices.append(k[categorie_ou_produit_selectionnee][index_selectionne_num])
+                else:
+                    indices.append(0)
             fig, ax = plt.subplots(figsize=(8, 6))  # Ajuster la taille du tracé
             ax.bar(range(1, len(mon_dict) + 1), indices, color='skyblue')
             ax.set_xlabel('Pays')
@@ -196,7 +201,7 @@ class AffichageDonnees:
 
         country_code_map = {country.alpha_2: country.name for country in pycountry.countries}
         gdf['code'] = gdf['code'].map(country_code_map) # remplacer code alpha2 par nom du pays
-        indices_t = ["indice_marius1", "indice_marius2", "indice_marius3", "indice_marius4"]
+        indices_t = ["indice01", "indicefrance"]
         categories_ou_produits = list(mon_dict['France'].keys())
         indice = st.sidebar.selectbox("Choisissez un indice :", indices_t)
         index_indice = indices_t.index(indice)
@@ -211,7 +216,10 @@ class AffichageDonnees:
         data = {}
         for pays, valeurs in mon_dict.items():
             if categories_ou_produits in valeurs:
-                data[pays] = valeurs[categories_ou_produits][index_indice]
+                if valeurs[categories_ou_produits] is not np.nan:
+                    data[pays] = valeurs[categories_ou_produits][index_indice]
+                else:
+                    data[pays] = np.nan
 
         # Dataframe car Plotly prend un dataframe en entrée
         df_plotly = pd.DataFrame({'pays': list(data.keys()), 'Indice': list(data.values())})
@@ -231,7 +239,7 @@ class AffichageDonnees:
 
         # Afficher la carte dans Streamlit
         st.plotly_chart(fig)
-
+"""
 # test histogramme
 categories_test = {
             'France': {
@@ -247,7 +255,7 @@ categories_test = {
                 'Articles de sport et de plein air': [70, 75, 80, 50]
             }}
 
-produits_test = {
+# produits_test = {
             'France': {
                 'Sac à dos imperméable': [82, 75, 90, 85],
                 'Tapis de yoga antidérapant': [60, 65, 70, 68]
@@ -261,8 +269,9 @@ produits_test = {
                 'Tapis de yoga antidérapant': [70, 75, 80, 50]
             }}
 
-mon_test = AffichageDonnees(produits_test, categories_test)
+#mon_test = AffichageDonnees(produits_test, categories_test)
 
 # ne pas executer les deux en même temps
 #mon_test.plot_histogramme(False)
-mon_test.AfficherCarte(False)
+#mon_test.AfficherCarte(False)
+"""

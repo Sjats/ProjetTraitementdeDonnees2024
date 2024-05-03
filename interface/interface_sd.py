@@ -1,10 +1,10 @@
 import keyboard
 import time
 import os
-import pickle
+# import pickle
 from classes.affichages_donnees import AffichageDonnees
-from classes.produit import bddinterfaceprod as ind_prod_imp
-from classes.categorie_produit import bddinterfacecat as ind_cat_imp
+from classes.categorie_produit_corrige import bddinterfacecat as ind_cat_imp
+from classes.produit_corrige import bddinterfaceprod as ind_prod_imp
 
 etoiles = "***********************************************"
 "****************************"
@@ -45,22 +45,21 @@ class InterfaceSd:
         print(" espace pour aller en arrière")
         print("[q] pour quitter")
 
-        with open("donnees/base_indice_produit.pkl", "rb") as file:
-            prod_data = pickle.load(file)
+        # with open("donnees/base_indice_produit.pkl", "rb") as file:
+        #    prod_data = pickle.load(file)
 
-        with open("donnees/base_indice_categorie.pkl", "rb") as file:
-            cat_data = pickle.load(file)
+        # with open("donnees/base_indice_categorie.pkl", "rb") as file:
+        #    cat_data = pickle.load(file)
 
-        afficheur = AffichageDonnees(prod_data, cat_data)
+        afficheur = AffichageDonnees(ind_prod_imp(), ind_cat_imp())
 
         while True:
 
-            if keyboard.is_pressed(1):
-                print(ind_prod_imp())
+            if keyboard.is_pressed("1"):
                 afficheur.AfficherCarte(var_af)
-                os.system()  # mettre commande execution carte
+                os.system("streamlit run c:/Users/Sunifred/Documents/GitHub/ProjetTraitementdeDonnees2024/__main__.py")  # mettre commande execution carte
 
-            if keyboard.is_pressed(2):
+            if keyboard.is_pressed("2"):
                 afficheur.plot_histogramme(var_af)
 
             if keyboard.is_pressed("q"):
