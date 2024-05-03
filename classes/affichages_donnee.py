@@ -250,7 +250,6 @@ class AffichageDonnees:
         gdf['code'] = gdf['code'].map(country_code_map)
         # remplacer code alpha2 par nom du pays
         indices_t = ["indice01", "indicefrance"]
-
         categories_ou_produits = list(mon_dict['France'].keys())
         indice = st.sidebar.selectbox("Choisissez un indice :", indices_t)
         index_indice = indices_t.index(indice)

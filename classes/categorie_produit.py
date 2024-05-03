@@ -1,7 +1,7 @@
 import os
 import pickle
-from classes.produit import *
 import numpy as np
+from classes.produit import Produit
 
 
 class CategorieProduit:
@@ -50,6 +50,8 @@ class CategorieProduit:
         # Initialisation des attributs
         self._nom = nom
         self._produits = produits
+        self._CalculIndicesCategories()
+        self.adresse_fichier = "donnees/"
 
     def _CalculIndicesCategories(self):
         """Calcule les indices associés à la catégorie de produits.
@@ -151,7 +153,7 @@ class CategorieProduit:
                     pass
 
         # Return des indices
-        return [indicescat01, indicescatfrance]
+        self.indices = [indicescat01, indicescatfrance]
 
     def EnregistrementCategorieProduit(self, adresse="donnees/"):
         """
@@ -182,7 +184,7 @@ class CategorieProduit:
                       "base_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self)
+        database_fichier.update({self._nom: self})
 
         with open(self.adresse_fichier + "base_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
@@ -218,91 +220,8 @@ class CategorieProduit:
                       "base_indice_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self._CalculIndicesCategories)
+        database_fichier.update({self._nom: self.indices})
 
         with open(self.adresse_fichier +
                   "base_indice_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
-
-NomsCategories = ['Electronique', 'Mobilier', 'Electromenager_Ustensiles',
-                  'Nourriture']
-
-
-Electronique = CategorieProduit('Electronique', dict())
-Mobilier = CategorieProduit('Mobilier', dict())
-Electromenager_Ustensiles = CategorieProduit('Electromenager_Ustensiles',
-                                             dict())
-Nourriture = CategorieProduit('Nourriture', dict())
-
-
-categories = [Electronique, Mobilier, Electromenager_Ustensiles, Nourriture]
-
-
-NomsProduitsElectronique = ['Pile', 'Airpods', 'Cable', 'Montre']
-
-
-NomsProduitsMobilier = ['Lampe', 'Tapis', 'Senteur', 'Etagere', 'Balance']
-
-
-NomsProduitsUstensile = ['Poele', 'Fer', 'Couteau', 'Brosse a dents',
-                         'Support de Telephone']
-
-
-NomsProduitsNourriture = ['Fromage', 'Boeuf', 'Patate', 'Salade', 'Onion',
-                          'Pomme', 'Myrtille', 'Glace', 'Pain', 'Lait', 'Oeuf',
-                          'Yaourt', 'Poulet', 'Poisson', 'Riz', 'Pates',
-                          'Banane', 'Sac_a_dos', 'Filtre a cafe',
-                          'Papier Toilette']
-
-
-produits = [Pile, Airpods, Cable, Montre, Lampe, Tapis, Senteur, Etagere,
-            Balance, Poele, Fer, Couteau, Kit_de_Survie, Brosse_a_dents,
-            Support_de_Telephone, Fromage, Boeuf, Patate, Salade, Onion, Pomme,
-            Myrtille, Glace, Pain, Lait, Oeuf, Yaourt, Poulet, Poisson, Riz,
-            Pates, Banane, Sac_a_dos, Filtre_a_cafe, Papier_Toilette]
-
-
-def produit_categorie():
-    for prod in produits:
-        if prod._nom in NomsProduitsElectronique:
-            Electronique._produits[prod._nom] = prod
-        elif prod._nom in NomsProduitsMobilier:
-            Mobilier._produits[prod._nom] = prod
-        elif prod._nom in NomsProduitsUstensile:
-            Electromenager_Ustensiles._produits[prod._nom] = prod
-        elif prod._nom in NomsProduitsNourriture:
-            Nourriture._produits[prod._nom] = prod
-
-
-produit_categorie()
-
-
-def bddinterfacecat():
-    """Crée la base de données nécessaire à l'interface pour accéder aux
-    indices des catégories de produits par pays.
-    Cette fonction parcourt les indices des catégories pour chaque pays.
-    Les indices sont stockés dans un dictionnaire de la forme
-    {pays: {catégorie: [indice_01, indice_France]}}.
-
-    Returns
-    -------
-    dict:
-        Un dictionnaire contenant les indices des catégories de produits par
-        pays.
-        Les clés sont les noms des pays et les valeurs sont des dictionnaires
-        contenant les indices des catégories de produits pour ce pays.
-    """
-    indicecat = dict()
-    for pays in Pays:
-        indicepays = dict()
-        for cat in categories:
-            if pays not in cat._CalculIndicesCategories()[0].keys():
-                indicepays[cat._nom] = np.nan
-            else:
-                indicepays[cat._nom] = (
-                    [cat._CalculIndicesCategories()[0][pays],
-                     cat._CalculIndicesCategories()[1][pays]]
-                )
-        indicecat[pays] = indicepays
-    return indicecat

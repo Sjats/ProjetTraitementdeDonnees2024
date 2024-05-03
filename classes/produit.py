@@ -49,7 +49,8 @@ class Produit:
 
         # Initialisation des attributs
         self._nom = nom
-        self._articles = articles
+        self.__select_articles(articles)
+        self._CalculIndicesProduit()
 
     def _CalculIndicesProduit(self):
         """Calcule les indices associés aux produits.
@@ -136,9 +137,9 @@ class Produit:
                         pass
 
         # Return des indices
-        return [indices01, indicesfrance]
+        self.indices = [indices01, indicesfrance]
 
-    def EnregistrementProduit(self, adresse="donnees/"):
+    def Enregistrement_prod(self, adresse="donnees/"):
         """
         Fonction qui enregistre les produits dans l'endroit indiqué
         Parameters
@@ -165,155 +166,50 @@ class Produit:
             with open(self.adresse_fichier + "base_produit.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self)
+        database_fichier.update({self._nom: self})
 
         with open(self.adresse_fichier + "base_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-    def EnregistrementIndicesProduit(self, adresse="donnees/"):
+    def Enregistrement_ind(self, adresse="donnees/"):
         """
-        Fonction qui enregistre les indice des produits dans l'endroit indiqué
+        Fonction qui enregistre les produits dans l'endroit indiqué
         Parameters
         ----------
         adresse : str
-            endroit dans lequel on enregistre les indices des produits
+            endroit dans lequel on enregistre les produits
         """
 
         if not (isinstance(adresse, str) or adresse is None):
             raise TypeError("adresse est de type str")
 
-        if not os.path.exists(self.adresse_fichier):
+        if not os.path.exists(adresse):
             raise ValueError("l'adresse fournie n'existe pas")
 
         if adresse is not None:
             self.adresse_fichier = adresse
 
-        if not os.path.exists(self.adresse_fichier +
-                              "base_indice_produit.pkl"):
+        if not os.path.exists(self.adresse_fichier + "base_ind_produit.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = {}
+            database_fichier = dict()
 
         else:
             # Ouvre la BDD
             with open(self.adresse_fichier +
-                      "base_indice_produit.pkl", "rb") as file:
+                      "base_ind_produit.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
-        database_fichier.update(self._CalculIndicesProduit)
+        database_fichier.update({self._nom: self.indices})
 
-        with open(self.adresse_fichier +
-                  "base_indice_produit.pkl", "wb") as file:
+        with open(self.adresse_fichier + "base_ind_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-
-NomsProduits = ['Pile', 'Airpods', 'Cable', 'Montre', 'Lampe', 'Tapis',
-                'Senteur', 'Etagere', 'Balance', 'Poele', 'Fer', 'Couteau',
-                'Kit de Survie', 'Brosse a dents', 'Support de Telephone',
-                'Fromage', 'Boeuf', 'Patate', 'Salade', 'Onion', 'Pomme',
-                'Myrtille', 'Glace', 'Pain', 'Lait', 'Oeuf', 'Yaourt',
-                'Poulet', 'Poisson', 'Riz', 'Pates', 'Banane', 'Sac_a_dos',
-                'Filtre a cafe', 'Papier Toilette']
-
-
-Pile = Produit('Pile', dict())
-Airpods = Produit('Airpods', dict())
-Cable = Produit('Cable', dict())
-Montre = Produit('Montre', dict())
-Lampe = Produit('Lampe', dict())
-Tapis = Produit('Tapis', dict())
-Senteur = Produit('Senteur', dict())
-Etagere = Produit('Etagere', dict())
-Balance = Produit('Balance', dict())
-Poele = Produit('Poele', dict())
-Fer = Produit('Fer', dict())
-Couteau = Produit('Couteau', dict())
-Kit_de_Survie = Produit('Kit de Survie', dict())
-Brosse_a_dents = Produit('Brosse a dents', dict())
-Support_de_Telephone = Produit('Support de Telephone', dict())
-Fromage = Produit('Fromage', dict())
-Boeuf = Produit('Boeuf', dict())
-Patate = Produit('Patate', dict())
-Salade = Produit('Salade', dict())
-Onion = Produit('Onion', dict())
-Pomme = Produit('Pomme', dict())
-Myrtille = Produit('Myrtille', dict())
-Glace = Produit('Glace', dict())
-Pain = Produit('Pain', dict())
-Lait = Produit('Lait', dict())
-Oeuf = Produit('Oeuf', dict())
-Yaourt = Produit('Yaourt', dict())
-Poulet = Produit('Poulet', dict())
-Poisson = Produit('Poisson', dict())
-Riz = Produit('Riz', dict())
-Pates = Produit('Pates', dict())
-Banane = Produit('Banane', dict())
-Sac_a_dos = Produit('Sac_a_dos', dict())
-Filtre_a_cafe = Produit('Filtre a cafe', dict())
-Papier_Toilette = Produit('Papier Toilette', dict())
-
-
-produits = [Pile, Airpods, Cable, Montre, Lampe, Tapis, Senteur, Etagere,
-            Balance, Poele, Fer, Couteau, Kit_de_Survie, Brosse_a_dents,
-            Support_de_Telephone, Fromage, Boeuf, Patate, Salade, Onion, Pomme,
-            Myrtille, Glace, Pain, Lait, Oeuf, Yaourt, Poulet, Poisson, Riz,
-            Pates, Banane, Sac_a_dos, Filtre_a_cafe, Papier_Toilette]
-
-
-NomsArticles = ['AA+alkaline+battery+pack', 'Bluetooth+wireless+earbuds',
-                'USB-C charging cable', 'Fitness smartwatch', 'LED+desk+lamp',
-                'Non-slip+yoga+mat', 'Essential oil diffuser',
-                'Modular storage shelf', 'Digital bathroom scale',
-                'Non-stick cookware set', 'Steam iron',
-                'Professional kitchen knife', 'First aid kit',
-                'Electric toothbrush', 'Car phone mount', 'cheese', 'beef',
-                'potatoes', 'lettuce', 'onions', 'apples', 'blueberries',
-                'ice cream', 'bread', 'milk', 'eggs', 'yogurt', 'chicken',
-                'fish', 'rice', 'pasta', 'bananas', 'Waterproof backpack',
-                'Paper coffee filters', 'Biodegradable toilet paper']
-
-
-Pays = ['United States', 'Singapore', 'Netherlands', 'Canada', 'Germany',
-        'Spain', 'Sweden', 'Poland', 'Japan', 'Australia', 'Brazil', 'Turkey',
-        'Mexico', 'United Kingdom', 'France', 'Italy', 'United Arab Emirates',
-        'India', 'China', 'Russia']
-
-
-def article_produit():
-    with open("donnees/database.pkl", "rb") as file:
-        dict_articles = pickle.load(file)
-    for art in dict_articles.keys():
-        for i in range(len(NomsArticles)):
-            if art.split('/')[1] == NomsArticles[i]:
-                produits[i]._articles[art] = dict_articles[art]
-
-
-article_produit()
-
-
-def bddinterfaceprod():
-    """Crée la base de données nécessaire à l'interface pour accéder aux
-    indices des produits par pays.
-    Cette fonction parcourt les indices des produits pour chaque pays.
-    Les indices sont stockés dans un dictionnaire de la forme
-    {pays: {produit: [indice_01, indice_France]}}.
-
-    Returns
-    -------
-    dict:
-        Un dictionnaire contenant les indices des produits par pays.
-        Les clés sont les noms des pays et les valeurs sont des dictionnaires
-        contenant les indices des produits pour ce pays.
-    """
-    indiceprod = dict()
-    for pays in Pays:
-        indicepays = dict()
-        for prod in produits:
-            if pays not in prod._CalculIndicesProduit()[0].keys():
-                indicepays[prod._nom] = np.nan
-            else:
-                indicepays[prod._nom] = (
-                    [prod._CalculIndicesProduit()[0][pays],
-                        prod._CalculIndicesProduit()[1][pays]]
-                )
-        indiceprod[pays] = indicepays
-    return indiceprod
+    def __select_articles(self, articles):
+        self._articles = {}
+        self._pays = []
+        for art in articles.keys():
+            aux = art.split("/")
+            if aux[1] == self._nom:
+                self._articles.update({art: articles[art]})
+                if aux[0] not in self._pays:
+                    self._pays.append(aux[0])

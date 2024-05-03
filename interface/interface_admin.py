@@ -4,7 +4,7 @@ import os
 import pickle
 from classes.site_web import SiteWeb
 from interface.interface_sd import InterfaceSd
-
+import numpy as np
 etoiles = "***********************************************"
 "****************************"
 
@@ -117,6 +117,7 @@ class InterfaceAdmin:
         print("[1] Ajouter site web")
         print("[2] Ajouter un nouvel ensemble de requete")
         print("[3] lancer web scraping ")
+        print("[4] Mettre à jour les indices")
         print("Pour aller en arrière appuye sur espace")
         print("Pour quitter, appuyez sur q")
 
@@ -135,6 +136,12 @@ class InterfaceAdmin:
 
             if keyboard.is_pressed("3"):
                 self.lancer_web_scraping()
+
+            if keyboard.is_pressed("4"):
+                self.update_indices_prod()
+                self.update_indices_cat()
+                os.system('cls' if os.name == 'nt' else 'clear')
+                self.main_menu()
 
     def ajouter_sw(self):
         time.sleep(0.5)
@@ -270,3 +277,73 @@ class InterfaceAdmin:
         site = SiteWeb(choix_sw)
         site.WebScrapping(rr[choix_rq])
         os.system('cls' if os.name == 'nt' else 'clear')
+
+    def update_indices_prod(self):
+        """Crée la base de données nécessaire à l'interface pour accéder aux
+        indices des produits par pays.
+        Cette fonction parcourt les indices des produits pour chaque pays.
+        Les indices sont stockés dans un dictionnaire de la forme
+        {pays: {produit: [indice_01, indice_France]}}.
+
+        Returns
+        -------
+        dict:
+            Un dictionnaire contenant les indices des produits par pays.
+            Les clés sont les noms des pays et les valeurs sont des
+            dictionnaires
+            contenant les indices des produits pour ce pays.
+        """
+        with open("donnees/base_produit.pkl", "rb") as file:
+            produits = pickle.load(file)
+
+        self.__pays = produits["AA+alkaline+battery+pack"]._pays
+        indiceprod = dict()
+        for pays in self.__pays:
+            indicepays = dict()
+            for prod in produits:
+                if pays not in produits[prod].indices[0].keys():
+                    indicepays[prod] = [np.nan, np.nan]
+                else:
+                    indicepays[prod] = (
+                        [produits[prod].indices[0][pays],
+                            produits[prod].indices[1][pays]]
+                    )
+            indiceprod[pays] = indicepays
+
+        with open("donnees/bdd_indice_prod.pkl", "wb") as file:
+            pickle.dump(indiceprod, file)
+
+    def update_indices_cat(self):
+        """Crée la base de données nécessaire à l'interface pour accéder aux
+        indices des catégories de produits par pays.
+        Cette fonction parcourt les indices des catégories pour chaque pays.
+        Les indices sont stockés dans un dictionnaire de la forme
+        {pays: {catégorie: [indice_01, indice_France]}}.
+
+        Returns
+        -------
+        dict:
+            Un dictionnaire contenant les indices des catégories de produits
+            par pays.
+            Les clés sont les noms des pays et les valeurs sont des 
+            dictionnaires
+            contenant les indices des catégories de produits pour ce pays.
+        """
+        with open("donnees/base_produit.pkl", "rb") as file:
+            categories = pickle.load(file)
+        Pays = self.__pays
+        indicecat = dict()
+        for pays in Pays:
+            indicepays = dict()
+            for cat in categories:
+                if pays not in categories[cat].indices[0].keys():
+                    indicepays[cat] = [np.nan, np.nan]
+                else:
+                    indicepays[cat] = (
+                        [categories[cat].indices[0][pays],
+                         categories[cat].indices[1][pays]]
+                    )
+            indicecat[pays] = indicepays
+
+        with open("donnees/bdd_indice_cat.pkl", "wb") as file:
+            pickle.dump(indicecat, file)
