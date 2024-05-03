@@ -148,18 +148,17 @@ class AffichageDonnees:
             Crée l'histogramme pour un indice et une catégorie précise
             déjà sélectionnée.
             """
-            plt.clf()  # Effacer le tracé précédent
+            plt.clf()
             index_selectionne_num = indices.index(index_selectionne)
             indices = []
             for k in mon_dict.values():
-                if k[categorie_ou_produit_selectionnee] is not np.nan:
+                if k[categorie_ou_produit_selectionnee] is not None:
                     ind = k[categorie_ou_produit_selectionnee]
                     ind = ind[index_selectionne_num]
                     indices.append(ind)
                 else:
                     indices.append(0)
             fig, ax = plt.subplots(figsize=(8, 6))
-            # Ajuster la taille du tracé
             ax.bar(range(1, len(mon_dict) + 1), indices, color='skyblue')
             ax.set_xlabel('Pays')
             ax.set_ylabel("Valeur de l'indice")
@@ -167,18 +166,11 @@ class AffichageDonnees:
                          f"'{categorie_ou_produit_selectionnee}' pour "
                          f"l'indice {index_selectionne}")
 
-            ax.yaxis.grid(True)   # Ajouter une grille horizontale
+            ax.yaxis.grid(True)
             ax.set_xticks(range(1, len(mon_dict)+1))
-            # Définir les positions des ticks sur l'axe des abscisses
-            # (+1 car sinon le premier pays s'affiche en 0)
             ax.set_xticklabels(mon_dict.keys())
-            # Attribuer les noms des pays aux positions des ticks
 
-            canvas = FigureCanvasTkAgg(fig, master=fenetre)
-            canvas.draw()
-            canvas.get_tk_widget().grid(row=1, column=0,
-                                        columnspan=2, padx=10,
-                                        pady=10, sticky="nsew")
+            return fig
 
         def on_selected(event):
             """
@@ -189,12 +181,16 @@ class AffichageDonnees:
             Args:
                 event: L'événement déclenché par la sélection de l'utilisateur.
             """
-            index_selectionne = selecteur_index.get()  # important de metre un
-            # entier car str par défault
+            if self.canvas:
+                self.canvas.get_tk_widget().destroy()  # Détruire l'ancien widget du graphique
+            index_selectionne = selecteur_index.get()
             categorie_ou_produit_selectionnee = selecteur_categorie.get()
-            tracer_histogramme(index_selectionne,
-                               categorie_ou_produit_selectionnee,
-                               indices)
+            fig = tracer_histogramme(index_selectionne,
+                                     categorie_ou_produit_selectionnee,
+                                     indices)
+            self.canvas = FigureCanvasTkAgg(fig, master=frame_graphe)
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
         # Création de la fenêtre principale
         fenetre = tk.Tk()
@@ -202,7 +198,7 @@ class AffichageDonnees:
 
         # Sélecteur d'indices
         selecteur_index = ttk.Combobox(fenetre, values=indices)
-        selecteur_index.grid(row=0, column=0, padx=10, pady=10)
+        selecteur_index.pack(padx=10, pady=10)
         selecteur_index.current(0)
         selecteur_index.bind("<<ComboboxSelected>>", on_selected)
 
@@ -210,12 +206,15 @@ class AffichageDonnees:
 
         selecteur_categorie = ttk.Combobox(fenetre,
                                            values=categories_ou_produit)
-        selecteur_categorie.grid(row=0, column=1, padx=10, pady=10)
+        selecteur_categorie.pack(padx=10, pady=10)
         selecteur_categorie.current(0)
         selecteur_categorie.bind("<<ComboboxSelected>>", on_selected)
 
+        frame_graphe = tk.Frame(fenetre)
+        frame_graphe.pack(fill=tk.BOTH, expand=True)
+
         # Affichage initial de l'histogramme
-        tracer_histogramme(indices[0], categories_ou_produit[0], indices)
+        on_selected(None)
 
         def on_close():
             fenetre.destroy()
@@ -224,6 +223,7 @@ class AffichageDonnees:
         fenetre.protocol("WM_DELETE_WINDOW", on_close)
         # Lancement de la boucle principale
         fenetre.mainloop()
+
 
     def AfficherCarte(self, sur_quoi):
         """
