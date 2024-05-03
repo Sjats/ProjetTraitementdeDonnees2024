@@ -3,6 +3,8 @@ import time
 import os
 import pickle
 from classes.affichages_donnees import AffichageDonnees
+from classes.produit import bddinterfaceprod as ind_prod_imp
+from classes.categorie_produit import bddinterfacecat as ind_cat_imp
 
 etoiles = "***********************************************"
 "****************************"
@@ -54,6 +56,7 @@ class InterfaceSd:
         while True:
 
             if keyboard.is_pressed(1):
+                print(ind_prod_imp())
                 afficheur.AfficherCarte(var_af)
                 os.system()  # mettre commande execution carte
 
