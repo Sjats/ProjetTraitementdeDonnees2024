@@ -1,9 +1,8 @@
 import keyboard
 import os
 from classes.affichages_donnee import AffichageDonnees
-from classes.categorie_produit import bddinterfacecat as ind_cat_imp
-from classes.produit import bddinterfaceprod as ind_prod_imp
 import time
+import pickle
 
 etoiles = "***********************************************"
 
@@ -37,7 +36,13 @@ class InterfaceSd:
     def type_affichage(self, var_af):
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Chargement en cours...")
-        afficheur = AffichageDonnees(ind_prod_imp(), ind_cat_imp())
+
+        with open("donnees/bdd_indice_cat.pkl", "rb") as file:
+            ind_cat = pickle.load(file)
+
+        with open("donnees/bdd_indice_prod.pkl", "rb") as file:
+            ind_prod = pickle.load(file)
+        afficheur = AffichageDonnees(ind_prod, ind_cat)
         os.system('cls' if os.name == 'nt' else 'clear')
         print(etoiles)
         print("Type d'affichage")
