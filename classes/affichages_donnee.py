@@ -160,7 +160,7 @@ class AffichageDonnees:
                 else:
                     indices.append(0)
             fig, ax = plt.subplots(figsize=(8, 6))
-            ax.bar(range(1, len(mon_dict) + 1), indices, color='skyblue')
+            ax.bar(mon_dict.keys(), indices, color='skyblue')
             ax.set_xlabel('Pays')
             ax.set_ylabel("Valeur de l'indice")
             ax.set_title("Histogramme pour la catégorie "
@@ -168,8 +168,8 @@ class AffichageDonnees:
                          f"l'indice {index_selectionne}")
 
             ax.yaxis.grid(True)
-            ax.set_xticks(range(1, len(mon_dict)+1))
-            ax.set_xticklabels(mon_dict.keys())
+            plt.xticks(rotation=90)
+            plt.tight_layout()
 
             return fig
 
