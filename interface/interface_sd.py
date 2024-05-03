@@ -37,7 +37,8 @@ class InterfaceSd:
                 break
 
     def type_affichage(self, var_af):
-        time.sleep(0.5)
+        afficheur = AffichageDonnees(ind_prod_imp(), ind_cat_imp())
+        time.sleep(0.1)
         print(etoiles)
         print("Type d'affichage")
         print("[1] Carte")
@@ -51,7 +52,7 @@ class InterfaceSd:
         # with open("donnees/base_indice_categorie.pkl", "rb") as file:
         #    cat_data = pickle.load(file)
 
-        afficheur = AffichageDonnees(ind_prod_imp(), ind_cat_imp())
+        
 
         while True:
 

@@ -11,7 +11,7 @@ etoiles = "***********************************************"
 
 class InterfaceAdmin:
     def __init__(self):
-       # os.system('cls' if os.name == 'nt' else 'clear')
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(etoiles)
         print("Bienvenu dans la section utilisateur")
         print(etoiles)

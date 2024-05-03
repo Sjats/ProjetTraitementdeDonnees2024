@@ -126,10 +126,13 @@ class Produit:
         for key in self._articles.keys():
             if self._articles[key]._pays in prix_prod:
                 if prix_prod[self._articles[key]._pays] is not None:
-                    ind01 = (prix_prod[self._articles[key]._pays] - prix_min)
-                    ind01 /= (prix_max - prix_min)
-                    ind01 = round(ind01, 2)
-                    indices01[self._articles[key]._pays] = ind01
+                    if prix_prod[self._articles[key]._pays] in M:
+                        ind01 = (prix_prod[self._articles[key]._pays] - prix_min)
+                        ind01 /= (prix_max - prix_min)
+                        ind01 = round(ind01, 2)
+                        indices01[self._articles[key]._pays] = ind01
+                    else:
+                        pass
             else:
                 pass
 
@@ -138,11 +141,14 @@ class Produit:
         for key in self._articles.keys():
             if self._articles[key]._pays in prix_prod:
                 if prix_prod[self._articles[key]._pays] is not None:
-                    indfrance = round(
-                        prix_prod[self._articles[key]._pays] / prix_france,
-                        2
-                        )
-                    indicesfrance[self._articles[key]._pays] = indfrance
+                    if prix_prod[self._articles[key]._pays] in M:
+                        indfrance = round(
+                            prix_prod[self._articles[key]._pays] / prix_france,
+                            2
+                            )
+                        indicesfrance[self._articles[key]._pays] = indfrance
+                    else:
+                        pass
 
 
         # Return des indices

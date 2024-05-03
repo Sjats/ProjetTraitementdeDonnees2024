@@ -151,17 +151,23 @@ class CategorieProduit:
         # Calcul de indicescat01
         for pays in prix_cat.keys():
             if prix_cat[pays] is not None:
-                indcat01 = (prix_cat[pays] - prix_min)
-                indcat01 /= (prix_max - prix_min)
-                indcat01 = round(indcat01, 2)
-                indicescat01[pays] = indcat01
+                if prix_cat[pays] in M:
+                    indcat01 = (prix_cat[pays] - prix_min)
+                    indcat01 /= (prix_max - prix_min)
+                    indcat01 = round(indcat01, 2)
+                    indicescat01[pays] = indcat01
+                else:
+                    pass
 
 
         # Calcul de indicescatfrance
         for pays in prix_cat.keys():
             if prix_cat[pays] is not None:
-                indcatfrance = round(prix_cat[pays] / prix_france, 2)
-                indicescatfrance[pays] = indcatfrance
+                if prix_cat[pays] in M:
+                    indcatfrance = round(prix_cat[pays] / prix_france, 2)
+                    indicescatfrance[pays] = indcatfrance
+                else:
+                    pass
 
 
         # Return des indices
