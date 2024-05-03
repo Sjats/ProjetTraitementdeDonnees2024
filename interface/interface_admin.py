@@ -57,7 +57,7 @@ class InterfaceAdmin:
         print(rr.keys())
         print("Attention, si vous rentrez un nom existant dans la base, celui"
               "ci sera effacé")
-        print("Souhaitez vous ajouter un site web ? ")
+        print("Souhaitez vous ajouter une requete ? ")
         print("[o] Oui")
         print("[n] Non")
 
