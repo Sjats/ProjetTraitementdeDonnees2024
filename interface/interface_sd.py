@@ -58,5 +58,5 @@ class InterfaceSd:
             if keyboard.is_pressed("q"):
                 print("Au revoir")
                 break
-            if keyboard.is_pressed("espace"):
+            if keyboard.is_pressed("space"):
                 self.main_menu()
