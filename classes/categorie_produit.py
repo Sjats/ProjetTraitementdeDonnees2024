@@ -1,14 +1,7 @@
-import sys
 import os
 import pickle
-from produit import *
-from article import Article
-from prix import Prix
+from classes.produit import *
 import numpy as np
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-from fonctions.domaine_a_pays import domaine_a_pays
 
 
 class CategorieProduit:
@@ -60,7 +53,7 @@ class CategorieProduit:
 
     def __str__(self):
         return f'{self._nom}, {self._produits}'
-    
+
     def _CalculIndicesCategories(self):
         """Calcule les indices associés à la catégorie de produits.
         Les indices sont calculés en fonction des prix moyens des articles par
@@ -101,7 +94,7 @@ class CategorieProduit:
                 prix_prod_m = 0
                 for key2 in prod._articles.keys():
                     if prod._articles[key]._pays == prod._articles[key2]._pays:
-                        if prod._articles[key]._prix.montant is not None :
+                        if prod._articles[key]._prix.montant is not None:
                             prix_prod_m += prod._articles[key]._prix.montant
                             i += 1
                 if i != 0:
@@ -124,7 +117,7 @@ class CategorieProduit:
                 vai = q1 - (q3-q1)*1.5
                 vas = q3 + (q3-q1)*1.5
                 for keys in prix_cat.keys():
-                    if prix_cat[keys] is not None :
+                    if prix_cat[keys] is not None:
                         if prix_cat[keys] < vai or prix_cat[keys] > vas:
                             prix_cat[keys] = None
                 for value in prix_cat.values():
@@ -135,17 +128,14 @@ class CategorieProduit:
         if len(M) > 0:
             prix_max = max(M)
             prix_min = min(M)
-            print(prix_max, prix_min)
             if prix_cat['France'] is not None:
                 prix_france = prix_cat['France']
-        else :
+        else:
             pass
 
         # Calcul de indicescat01
         for pays in prix_cat.keys():
-            print (pays)
             if prix_cat[pays] is not None:
-                print(prix_cat[pays])
                 indcat01 = (prix_cat[pays] - prix_min)
                 indcat01 /= (prix_max - prix_min)
                 indcat01 = round(indcat01, 2)
@@ -184,7 +174,8 @@ class CategorieProduit:
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier + "base_categorie.pkl", "rb") as file:
+            with open(self.adresse_fichier +
+                      "base_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
         database_fichier.update(self)
@@ -212,18 +203,21 @@ class CategorieProduit:
         if adresse is not None:
             self.adresse_fichier = adresse
 
-        if not os.path.exists(self.adresse_fichier + "base_indice_categorie.pkl"):
+        if not os.path.exists(self.adresse_fichier +
+                              "base_indice_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier + "base_indice_categorie.pkl", "rb") as file:
+            with open(self.adresse_fichier +
+                      "base_indice_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
         database_fichier.update(self._CalculIndicesCategories)
 
-        with open(self.adresse_fichier + "base_indice_categorie.pkl", "wb") as file:
+        with open(self.adresse_fichier +
+                  "base_indice_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
 
@@ -232,7 +226,8 @@ NomsCategories = ['Electronique', 'Mobilier', 'Electromenager_Ustensiles',
 
 Electronique = CategorieProduit('Electronique', dict())
 Mobilier = CategorieProduit('Mobilier', dict())
-Electromenager_Ustensiles = CategorieProduit('Electromenager_Ustensiles', dict())
+Electromenager_Ustensiles = CategorieProduit('Electromenager_Ustensiles',
+                                             dict())
 Nourriture = CategorieProduit('Nourriture', dict())
 
 categories = [Electronique, Mobilier, Electromenager_Ustensiles, Nourriture]
@@ -243,7 +238,7 @@ NomsProduitsMobilier = ['Lampe', 'Tapis', 'Senteur', 'Etagere', 'Balance']
 
 NomsProduitsUstensile = ['Poele', 'Fer', 'Couteau', 'Brosse a dents',
                          'Support de Telephone']
-                
+
 NomsProduitsNourriture = ['Fromage', 'Boeuf', 'Patate', 'Salade', 'Onion',
                           'Pomme', 'Myrtille', 'Glace', 'Pain', 'Lait', 'Oeuf',
                           'Yaourt', 'Poulet', 'Poisson', 'Riz', 'Pates',
@@ -267,6 +262,9 @@ def produit_categorie():
             Electromenager_Ustensiles._produits[prod._nom] = prod
         elif prod._nom in NomsProduitsNourriture:
             Nourriture._produits[prod._nom] = prod
+
+
+produit_categorie()
 
 
 def bddinterfacecat():
@@ -313,7 +311,6 @@ if __name__ == "__main__":
     # print(p2._CalculIndicesProduit())
     # c1 = CategorieProduit("nourriture", {"riz": p1, "pat": p2})
     # print(c1._CalculIndicesCategories())
-    produit_categorie()
-    print(Nourriture._CalculIndicesCategories())
+    # produit_categorie()
+    # print(Nourriture._CalculIndicesCategories())
     print(bddinterfacecat())
-    

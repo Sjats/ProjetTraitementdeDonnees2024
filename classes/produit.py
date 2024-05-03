@@ -1,13 +1,8 @@
 import os
-import sys
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 import pickle
 from classes.article import Article
 from classes.prix import Prix
 import numpy as np
-from fonctions.domaine_a_pays import domaine_a_pays
 
 
 class Produit:
@@ -49,8 +44,8 @@ class Produit:
         # for nom_article in articles.values():
         #     if not isinstance(nom_article, Article):
         #         raise TypeError(
-        #             "Les valeurs du dictionnaire d'articles doivent être une "
-        #             "instance d'Article"
+        #             "Les valeurs du dictionnaire d'articles doivent être "
+        #             "une instance d'Article"
         #         )
 
         # Initialisation des attributs
@@ -111,7 +106,7 @@ class Produit:
             prix_min = min(M)
             if prix_prod['France'] is not None:
                 prix_france = prix_prod['France']
-            
+
         # Calcul de indices01
         for key in self._articles.keys():
             if self._articles[key]._pays in prix_prod:
@@ -186,18 +181,21 @@ class Produit:
         if adresse is not None:
             self.adresse_fichier = adresse
 
-        if not os.path.exists(self.adresse_fichier + "base_indice_produit.pkl"):
+        if not os.path.exists(self.adresse_fichier +
+                              "base_indice_produit.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier + "base_indice_produit.pkl", "rb") as file:
+            with open(self.adresse_fichier +
+                      "base_indice_produit.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
         database_fichier.update(self._CalculIndicesProduit)
 
-        with open(self.adresse_fichier + "base_indice_produit.pkl", "wb") as file:
+        with open(self.adresse_fichier +
+                  "base_indice_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
 
