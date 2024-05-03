@@ -1,8 +1,8 @@
 import keyboard
 import os
-from classes.affichages_donnees import AffichageDonnees
-from classes.categorie_produit_corrige import bddinterfacecat as ind_cat_imp
-from classes.produit_corrige import bddinterfaceprod as ind_prod_imp
+from classes.affichages_donnee import AffichageDonnees
+from classes.categorie_produit import bddinterfacecat as ind_cat_imp
+from classes.produit import bddinterfaceprod as ind_prod_imp
 import time
 
 etoiles = "***********************************************"
