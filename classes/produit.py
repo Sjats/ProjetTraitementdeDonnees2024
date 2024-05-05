@@ -26,27 +26,27 @@ class Produit:
             Un objet Produit initialisé avec le nom et les articles fournis.
         """
         # Vérification des types des arguments
-        # if not isinstance(nom, str):
-        #     raise TypeError("Le nom doit être une instance de str.")
+        if not isinstance(nom, str):
+            raise TypeError("Le nom doit être une instance de str.")
 
-        # if not isinstance(articles, dict):
-        #     raise TypeError(
-        #         "Les articles doivent être une instance de dictionnaire."
-        #     )
+        if not isinstance(articles, dict):
+            raise TypeError(
+                "Les articles doivent être une instance de dictionnaire."
+            )
 
-        # for nom_article in articles.keys():
-        #     if not isinstance(nom_article, str):
-        #         raise TypeError(
-        #             "Les clés du dictionnaire d'articles doivent être une "
-        #             "instance de str."
-        #         )
+        for nom_article in articles.keys():
+            if not isinstance(nom_article, str):
+                raise TypeError(
+                    "Les clés du dictionnaire d'articles doivent être une "
+                    "instance de str."
+                )
 
-        # for nom_article in articles.values():
-        #     if not isinstance(nom_article, Article):
-        #         raise TypeError(
-        #             "Les valeurs du dictionnaire d'articles doivent être "
-        #             "une instance d'Article"
-        #         )
+        for nom_article in articles.values():
+            if not isinstance(nom_article, Article):
+                raise TypeError(
+                    "Les valeurs du dictionnaire d'articles doivent être "
+                    "une instance d'Article"
+                )
 
         # Initialisation des attributs
         self._nom = nom
@@ -86,8 +86,8 @@ class Produit:
                 if self._articles[key]._pays == self._articles[key2]._pays:
                     if self._articles[key]._prix.montant is not None:
                         self._articles[key]._prix = Prix(
-                            self._articles[key]._prix.montant,
-                            self._articles[key]._prix.devise)
+                            self._articles[key]._prix.devise,
+                            self._articles[key]._prix.montant)
                         prix_prod_m += self._articles[key]._prix.montant_euros
                         i += 1
             if i != 0:

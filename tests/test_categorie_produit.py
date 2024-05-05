@@ -1,10 +1,5 @@
-import sys
-import os
 import pytest
 import re
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
 from classes.categorie_produit import CategorieProduit
 from classes.produit import Produit
 from classes.article import Article
