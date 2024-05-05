@@ -88,8 +88,7 @@ class Produit:
                         self._articles[key]._prix = Prix(
                             self._articles[key]._prix.montant,
                             self._articles[key]._prix.devise)
-                        #Exemple Marius
-                        prix_prod_m += self._articles[key]._prix.montant
+                        prix_prod_m += self._articles[key]._prix.montant_euros
                         i += 1
             if i != 0:
                 prix_prod_m /= i
