@@ -5,7 +5,6 @@ import pickle
 from .prix import Prix
 from fonctions.domaine_a_devise import DomaineDevise
 from fonctions import domaine_a_pays
-from donnees.creation_bdd import renseigement_sites_web
 from fonctions import domaine_a_langue
 from translate import Translator
 from bs4 import BeautifulSoup
@@ -42,7 +41,7 @@ class SiteWeb:
         self._nom = nom
 
         # Charge les attributs du site demandé sous forme de dictionnaire
-        config_dict = renseigement_sites_web.configurations_sites.get(nom, {})
+        config_dict = rsw
 
         # Initialisation des Attributs
         for key, value in config_dict.items():

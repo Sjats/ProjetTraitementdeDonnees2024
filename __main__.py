@@ -4,6 +4,9 @@ from interface.interface_sd import InterfaceSd
 
 # Exemple d'utilisation des interfaces
 if __name__ == "__main__":
+    print("Attention, pour que le code fonctionne, "
+          "il faut se trouver à l'adresse .../Projet"
+          "TraitementdeDonnees2024.")
     print("Utilisateur : ")
     utilisateur = str(input())
     flag = True
