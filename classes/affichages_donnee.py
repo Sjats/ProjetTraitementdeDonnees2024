@@ -111,13 +111,32 @@ class AffichageDonnees:
             par pays.
         """
         if not isinstance(indices_produits, dict):
-            raise TypeError("les indices des produits doivent"
+            raise TypeError("Les indices des produits doivent"
                             " être renseignés sous la forme "
                             "d'un dictionnaire.")
         if not isinstance(indices_categorie_produit, dict):
             raise TypeError("Les indices des catégories de produits"
                             " doivent être renseignés sous "
                             "la forme d'un dictionnaire.")
+        for key, value1 in indices_produits.items():
+            if not isinstance(value1, dict):
+                raise TypeError("Les informations pour un pays dans produit"
+                                " doivent être sous forme de dictionnaire")
+            for value2 in value1.keys():
+                if not isinstance(value2, list):
+                    raise TypeError("Les valeures numériques des indices des "
+                                    "produits doivent être renseignés sous"
+                                    " forme de liste")
+        for key, value1 in indices_categorie_produit.items():
+            if not isinstance(value1, dict):
+                raise TypeError("Les informations pour un pays dans catégorie"
+                                " doivent être sous forme de dictionnaire")
+            for value2 in value1.keys():
+                if not isinstance(value2, list):
+                    raise TypeError("Les valeures numériques des indices des "
+                                    "catégories doivent être renseignés sous"
+                                    " forme de liste")
+
         self._indices_produits = indices_produits
         self._indices_categorie_produit = indices_categorie_produit
         self.canvas = None
