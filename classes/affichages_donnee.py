@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+import time
 # Import pour la carte interactive
 import streamlit as st
 import geopandas as gpd
@@ -242,6 +242,8 @@ class AffichageDonnees:
 
         # Afficher la carte dans Streamlit
         st.plotly_chart(fig)
+        print(self._indices_produits)
+        time.sleep(10)
 
 
 """
