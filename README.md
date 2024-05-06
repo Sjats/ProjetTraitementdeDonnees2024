@@ -1,7 +1,7 @@
 # ProjetTraitementdeDonnees2024
 
 ## Description
-L'objectif de ce projet est de réaliser du web scraping sur plusieurs sites afin de créer une base de données sur les prix de différents produits. Ensuite, le projet se propose de traiter ces données et de visualiser les résultats à travers une interface graphique.
+Cette application permet à l'administrateur de faire du web scraping et aux utilisateurs sans droits de visualiser les données issues du web scraping sous forme d'histogramme ou de carte.
 
 ## Diagramme des Cas d'Utilisation
 
