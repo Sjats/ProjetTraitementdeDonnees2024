@@ -69,7 +69,6 @@ def test_init_succes_affichage_donnees(kwargs):
     AffichageDonnees(**kwargs)
 
 
-
 @pytest.mark.parametrize(
     'kwargs, erreur, message_erreur',
     [
