@@ -5,7 +5,7 @@ import pickle
 from .prix import Prix
 from fonctions.domaine_a_devise import DomaineDevise
 from fonctions import domaine_a_pays
-from donnees import renseigement_sites_web
+from donnees.creation_bdd import renseigement_sites_web
 from fonctions import domaine_a_langue
 from translate import Translator
 from bs4 import BeautifulSoup
