@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import time
+
 # Import pour la carte interactive
 import streamlit as st
 import geopandas as gpd
@@ -106,12 +106,12 @@ class AffichageDonnees:
             ax.set_ylabel("Valeur de l'indice")
             if sur_quoi:
                 ax.set_title("Histogramme pour le produit "
-                         f"'{categorie_ou_produit_selectionnee}' pour "
-                         f"l'indice {index_selectionne}")
+                             f"'{categorie_ou_produit_selectionnee}' pour "
+                             f"l'indice {index_selectionne}")
             if not sur_quoi:
                 ax.set_title("Histogramme pour la catégorie "
-                         f"'{categorie_ou_produit_selectionnee}' pour "
-                         f"l'indice {index_selectionne}")
+                             f"'{categorie_ou_produit_selectionnee}' pour "
+                             f"l'indice {index_selectionne}")
             ax.yaxis.grid(True)
             plt.xticks(rotation=90)
             plt.tight_layout()
