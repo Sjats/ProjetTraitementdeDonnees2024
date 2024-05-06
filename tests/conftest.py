@@ -29,7 +29,7 @@ def prix_none_kwargs():
 # Articles
 
 @pytest.fixture
-def article1(prix_euros_kwargs):
+def article1_kwargs(prix_euros_kwargs):
     return {
           "id_article": 'France/Coffee+maker/0',
           "prix": Prix(**prix_euros_kwargs),
@@ -38,7 +38,7 @@ def article1(prix_euros_kwargs):
 
 
 @pytest.fixture
-def article2(prix_dollars_kwargs):
+def article2_kwargs(prix_dollars_kwargs):
     return {
         "id_article": 'United States/Coffee+maker/1',
         "prix": Prix(**prix_dollars_kwargs),
@@ -47,7 +47,7 @@ def article2(prix_dollars_kwargs):
 
 
 @pytest.fixture
-def article3(prix_euros_kwargs):
+def article3_kwargs(prix_euros_kwargs):
     return {
         "id_article": 'Spain/Bread/2',
         "prix": Prix(**prix_euros_kwargs),
@@ -56,7 +56,7 @@ def article3(prix_euros_kwargs):
 
 
 @pytest.fixture
-def article4(prix_none_kwargs):
+def article4_kwargs(prix_none_kwargs):
     return {
         "id_article": 'Japan/Coffee+maker/1',
         "prix": Prix(**prix_none_kwargs),
@@ -67,33 +67,33 @@ def article4(prix_none_kwargs):
 
 
 @pytest.fixture
-def coffe_maker(article1, article2):
+def coffe_maker_kwargs(article1_kwargs, article2_kwargs):
     return {
         "nom": "Coffee+maker",
-        "articles": {article1._id_article: Article(**article1),
-                     article2._id_article: Article(**article2)
+        "articles": {article1_kwargs["id_article"]: Article(**article1_kwargs),
+                     article2_kwargs["id_article"]: Article(**article2_kwargs)
                      }
 
     }
 
 
 @pytest.fixture
-def bread(article3, article4):
+def bread_kwargs(article3_kwargs, article4_kwargs):
     return {
         "nom": "bread",
-        "articles": {article1._id_article: Article(**article3),
-                     article2._id_article: Article(**article4)
+        "articles": {article3_kwargs["id_article"]: Article(**article3_kwargs),
+                     article4_kwargs["id_article"]: Article(**article4_kwargs)
                      }
     }
 
 
 # Stations
 @pytest.fixture
-def categorie(coffe_maker, bread):
+def categorie_kwargs(coffe_maker_kwargs, bread_kwargs):
     return {
         "nom": "cat",
-        "produits": {coffe_maker._nom: Produit(**coffe_maker),
-                     bread._nom: Produit(**bread)}
+        "produits": {coffe_maker_kwargs._nom: Produit(**coffe_maker_kwargs),
+                     bread_kwargs._nom: Produit(**bread_kwargs)}
     }
 
 # Configuration globale

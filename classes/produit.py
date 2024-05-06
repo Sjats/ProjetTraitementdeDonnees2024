@@ -1,4 +1,3 @@
-import os
 import pickle
 from classes.article import Article
 from classes.prix import Prix
@@ -143,69 +142,28 @@ class Produit:
         # Return des indices
         self.indices = [indices01, indicesfrance]
 
-    def Enregistrement_prod(self, adresse="donnees/"):
+    def Enregistrement_prod(self):
         """
-        Fonction qui enregistre les produits dans l'endroit indiqué
-        Parameters
-        ----------
-        adresse : str
-            endroit dans lequel on enregistre les produits
+        Fonction qui enregistre les produits
         """
-
-        if not (isinstance(adresse, str) or adresse is None):
-            raise TypeError("adresse est de type str")
-
-        if not os.path.exists(adresse):
-            raise ValueError("l'adresse fournie n'existe pas")
-
-        if adresse is not None:
-            self.adresse_fichier = adresse
-
-        if not os.path.exists(self.adresse_fichier + "base_produit.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = dict()
-
-        else:
-            # Ouvre la BDD
-            with open(self.adresse_fichier + "base_produit.pkl", "rb") as file:
-                database_fichier = pickle.load(file)
+        with open("donnees/base_produit.pkl", "rb") as file:
+            database_fichier = pickle.load(file)
 
         database_fichier.update({self._nom: self})
 
-        with open(self.adresse_fichier + "base_produit.pkl", "wb") as file:
+        with open("donnees/base_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-    def Enregistrement_ind(self, adresse="donnees/"):
+    def Enregistrement_ind(self):
         """
-        Fonction qui enregistre les produits dans l'endroit indiqué
-        Parameters
-        ----------
-        adresse : str
-            endroit dans lequel on enregistre les produits
+        Fonction qui enregistre les indices des produits
         """
-
-        if not (isinstance(adresse, str) or adresse is None):
-            raise TypeError("adresse est de type str")
-
-        if not os.path.exists(adresse):
-            raise ValueError("l'adresse fournie n'existe pas")
-
-        if adresse is not None:
-            self.adresse_fichier = adresse
-
-        if not os.path.exists(self.adresse_fichier + "base_ind_produit.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = dict()
-
-        else:
-            # Ouvre la BDD
-            with open(self.adresse_fichier +
-                      "base_ind_produit.pkl", "rb") as file:
-                database_fichier = pickle.load(file)
+        with open("donnees/bdd_indice_prod.pkl", "rb") as file:
+            database_fichier = pickle.load(file)
 
         database_fichier.update({self._nom: self.indices})
 
-        with open(self.adresse_fichier + "base_ind_produit.pkl", "wb") as file:
+        with open("donnees/bdd_indice_prod.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
     def __select_articles(self, articles):
