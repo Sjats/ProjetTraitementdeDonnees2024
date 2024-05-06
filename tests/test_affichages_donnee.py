@@ -55,3 +55,15 @@ def test_produit_init_echec(indices_produits,
 def test_produit_init_succes(indices_produits, indices_categories,):
 
     AffichageDonnees(indices_produits, indices_categories,)
+
+@pytest.mark.parametrize(
+    'kwargs, erreur, message_erreur',
+    [
+        ({'sur_quoi': 3, 'execute_apres': None}, TypeError, "sur_quoi doit être une instance de bool.")
+    ]
+)
+
+def test_plot_histo_bool_echec(kwargs, erreur, message_erreur):
+    with pytest.raises(erreur, match=re.escape(message_erreur)):
+        interface = AffichageDonnees({}, {})
+        interface.plot_histogramme(**kwargs)
