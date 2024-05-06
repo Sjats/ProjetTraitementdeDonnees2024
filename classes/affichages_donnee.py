@@ -98,7 +98,8 @@ class AffichageDonnees:
         """
         return 'yo'
 
-    def __init__(self, indices_produits, indices_categorie_produit):
+    def __init__(self, indices_produits: dict,
+                 indices_categorie_produit: dict):
         """
         Initialise une instance de la classe InterfaceUtilisateur.
 
