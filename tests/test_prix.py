@@ -4,17 +4,42 @@ from classes.prix import Prix
 
 
 @pytest.mark.parametrize(
-    'prix', 'erreur', 'message_erreur',
+    'devise, montant, erreur, message_erreur',
     [
-        (Prix(0.9308, 30), TypeError, "devise doit être de type str"),
+        (0.9308, 30, TypeError, "devise doit être de type str"),
 
-        (Prix('USD', {'USD': 25}),
+        ('USD', {'USD': 25},
          TypeError, (
             "montant doit être de "
             "type float ou None"
         ))
      ]
 )
-def test_produit_init_echec(prix, erreur, message_erreur):
+def test_produit_init_echec(devise, montant, erreur, message_erreur):
     with pytest.raises(erreur, match=re.escape(message_erreur)):
-        prix
+        Prix(devise, montant)
+
+
+@pytest.mark.parametrize(
+    'devise, montant',
+    [
+        ('USD', 30),
+        ('EUR', 30),
+        ("EUR", None)
+     ]
+)
+def test_produit_init_succes(devise, montant):
+    p = Prix(devise, montant)
+    str(p)
+
+
+@pytest.mark.parametrize(
+    'devise, montant, offline',
+    [
+        ('USD', 30, True),
+        ('USD', 30, False)
+     ]
+)
+def test_produit_conversioneuros(devise, montant, offline):
+    p = Prix(devise, montant)
+    p._ConversionEuros(offline)
