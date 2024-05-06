@@ -121,6 +121,7 @@ class AffichageDonnees:
         self._indices_produits = indices_produits
         self._indices_categorie_produit = indices_categorie_produit
         self.canvas = None
+        self.mon_dict = None
 
     def plot_histogramme(self, sur_quoi: bool, execute_apres):
         # à faire : remplacer par le nom des indices sur le sélecteur.
