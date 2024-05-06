@@ -334,7 +334,7 @@ class InterfaceAdmin:
         dict:
             Un dictionnaire contenant les indices des catégories de produits
             par pays.
-            Les clés sont les noms des pays et les valeurs sont des 
+            Les clés sont les noms des pays et les valeurs sont des
             dictionnaires
             contenant les indices des catégories de produits pour ce pays.
         """
