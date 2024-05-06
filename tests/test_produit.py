@@ -41,4 +41,3 @@ def test_station_init_succes(kwargs_str, request):
     Produit(**kwargs)
     # prod = Produit(**kwargs)
     # prod.Enregistrement_prod()
-    # prod.Enregistrement_ind()

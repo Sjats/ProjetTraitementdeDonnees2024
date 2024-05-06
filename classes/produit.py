@@ -154,18 +154,6 @@ class Produit:
         with open("donnees/base_produit.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-    def Enregistrement_ind(self):
-        """
-        Fonction qui enregistre les indices des produits
-        """
-        with open("donnees/bdd_indice_prod.pkl", "rb") as file:
-            database_fichier = pickle.load(file)
-
-        database_fichier.update({self._nom: self.indices})
-
-        with open("donnees/bdd_indice_prod.pkl", "wb") as file:
-            pickle.dump(database_fichier, file)
-
     def __select_articles(self, articles):
         self._articles = {}
         self._pays = []

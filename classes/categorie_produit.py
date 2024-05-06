@@ -182,28 +182,3 @@ class CategorieProduit:
 
         with open("donnees/base_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
-
-    def EnregistrementIndicesCategorieProduit(self):
-        """
-        Fonction qui enregistre les indice des catégories dans l'endroit
-        indiqué
-
-        Parameters
-        ----------
-        adresse : str
-            endroit dans lequel on enregistre les indices des catégories
-        """
-
-        if not os.path.exists("donnees/base_indice_categorie.pkl"):
-            # Cree un dictionnaire vide si le fichier n'existe pas
-            database_fichier = {}
-
-        else:
-            # Ouvre la BDD
-            with open("donnees/base_indice_categorie.pkl", "rb") as file:
-                database_fichier = pickle.load(file)
-
-        database_fichier.update({self._nom: self.indices})
-
-        with open("donnees/base_indice_categorie.pkl", "wb") as file:
-            pickle.dump(database_fichier, file)
