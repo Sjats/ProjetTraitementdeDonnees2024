@@ -53,10 +53,19 @@ class InterfaceSd:
         print("[q] pour quitter")
         while True:
 
-            if keyboard.is_pressed("1"):
-                afficheur.AfficherCarte(var_af)
-                command = "streamlit run " + os.getcwd() + "/__main__.py"
+            if keyboard.is_pressed("1") and not var_af:
+                command = ("streamlit run " +
+                           os.getcwd() +
+                           "/classes/execute_carte_categories.py")
                 os.system(command)
+                os.system('cls' if os.name == 'nt' else 'clear')
+                self.main_menu()
+            if keyboard.is_pressed("1") and var_af:
+                command = ("streamlit run " +
+                           os.getcwd() +
+                           "/classes/execute_carte_produits.py")
+                os.system(command)
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.main_menu()
             if keyboard.is_pressed("2"):
                 afficheur.plot_histogramme(var_af, self.main_menu)

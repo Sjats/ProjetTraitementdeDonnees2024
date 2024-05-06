@@ -36,6 +36,7 @@ class InterfaceAdmin:
             if keyboard.is_pressed('2'):
                 os.system('cls' if os.name == 'nt' else 'clear')
                 self.menu_affichage()
+                break
 
     def menu_affichage(self):
         os.system('cls' if os.name == 'nt' else 'clear')
