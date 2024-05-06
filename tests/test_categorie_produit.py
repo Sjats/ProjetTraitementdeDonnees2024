@@ -31,7 +31,6 @@ def test_categorie_init_echec(categorie_kwargs, kwargs,
 @pytest.mark.parametrize(
     "kwargs_str",
     [
-
         "categorie_kwargs"
     ]
 )
