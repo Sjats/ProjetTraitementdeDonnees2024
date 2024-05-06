@@ -13,12 +13,14 @@ class InterfaceAdmin:
     def __init__(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(etoiles)
-        print("Bienvenu dans la section utilisateur")
+        print("Bienvenu dans la section admin")
         print(etoiles)
         self.main_menu()
 
     def main_menu(self):
-        time.sleep(0.5)
+        time.sleep(1.5)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
         print(etoiles)
         print("[1] Récolecter des données")
         print("[2] Entrer la section d'affichage")
