@@ -246,8 +246,6 @@ class AffichageDonnees:
 
         # Afficher la carte dans Streamlit
         st.plotly_chart(fig)
-        print(self._indices_produits)
-        time.sleep(10)
 
 
 """
