@@ -118,11 +118,11 @@ class AffichageDonnees:
             raise TypeError("Les indices des catégories de produits"
                             " doivent être renseignés sous "
                             "la forme d'un dictionnaire.")
-        for key, value1 in indices_produits.items():
+        for key1, value1 in indices_produits.items():
             if not isinstance(value1, dict):
                 raise TypeError("Les informations pour un pays dans produit"
                                 " doivent être sous forme de dictionnaire")
-            for value2 in value1.keys():
+            for key2, value2 in value1.items():
                 if not isinstance(value2, list):
                     raise TypeError("Les valeures numériques des indices des "
                                     "produits doivent être renseignés sous"
@@ -131,7 +131,7 @@ class AffichageDonnees:
             if not isinstance(value1, dict):
                 raise TypeError("Les informations pour un pays dans catégorie"
                                 " doivent être sous forme de dictionnaire")
-            for value2 in value1.keys():
+            for key2, value2 in value1.items():
                 if not isinstance(value2, list):
                     raise TypeError("Les valeures numériques des indices des "
                                     "catégories doivent être renseignés sous"
