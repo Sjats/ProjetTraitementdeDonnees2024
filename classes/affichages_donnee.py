@@ -167,7 +167,7 @@ class AffichageDonnees:
         # Lancement de la boucle principale
         fenetre.mainloop()
 
-    def AfficherCarte(self, sur_quoi):
+    def AfficherCarte(self, sur_quoi: bool):
         """
         Affiche une carte interactive permettant
         de séléctionner la catégorie de produit et l'indice.
@@ -179,6 +179,8 @@ class AffichageDonnees:
             T : si on veut s'intéresser aux produits
             F : si on veut s'intéresser aux catégories
         """
+        if not isinstance(sur_quoi, bool):
+            raise TypeError("sur_quoi doit être une instance de bool.")
         if not sur_quoi:
             mon_dict = self._indices_categorie_produit
         else:

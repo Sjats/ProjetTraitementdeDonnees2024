@@ -56,12 +56,11 @@ def test_init_echec_affichage_donnees(kwargs, erreur, message_erreur):
 @pytest.mark.parametrize(
     'kwargs',
     [
-        ({'indices_produits': {'France': ['riz', [82, 75]]},
-          'indices_categorie_produit': {
+        {'indices_produits': {'France': {'riz': [82, 75]}},
+         'indices_categorie_produit': {
               'France': {
                   'Articles de sport et de plein air': [60, 65]
                         }}},
-         ),
 
     ]
 )
@@ -86,7 +85,7 @@ def test_plot_histo_bool_echec(kwargs, erreur, message_erreur):
 @pytest.mark.parametrize(
     'kwargs, erreur, message_erreur',
     [
-        ({'sur_quoi': 3, 'execute_apres': None},
+        ({'sur_quoi': 3},
          TypeError,
          "sur_quoi doit être une instance de bool.")
     ]
