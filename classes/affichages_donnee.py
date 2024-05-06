@@ -183,7 +183,8 @@ class AffichageDonnees:
                 event: L'événement déclenché par la sélection de l'utilisateur.
             """
             if self.canvas:
-                self.canvas.get_tk_widget().destroy()  # Détruire l'ancien widget du graphique
+                # Détruire l'ancien widget du graphique
+                self.canvas.get_tk_widget().destroy()
             index_selectionne = selecteur_index.get()
             categorie_ou_produit_selectionnee = selecteur_categorie.get()
             fig = tracer_histogramme(index_selectionne,
@@ -224,7 +225,6 @@ class AffichageDonnees:
         fenetre.protocol("WM_DELETE_WINDOW", on_close)
         # Lancement de la boucle principale
         fenetre.mainloop()
-
 
     def AfficherCarte(self, sur_quoi):
         """
