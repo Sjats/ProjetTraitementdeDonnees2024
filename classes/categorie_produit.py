@@ -52,7 +52,6 @@ class CategorieProduit:
         self._nom = nom
         self._produits = produits
         self._CalculIndicesCategories()
-        self.adresse_fichier = "donnees/"
 
     def _CalculIndicesCategories(self):
         """Calcule les indices associés à la catégorie de produits.
@@ -160,7 +159,7 @@ class CategorieProduit:
         # Return des indices
         self.indices = [indicescat01, indicescatfrance]
 
-    def EnregistrementCategorieProduit(self, adresse="donnees/"):
+    def EnregistrementCategorieProduit(self):
         """
         Fonction qui enregistre les catégories dans l'endroit indiqué
 
@@ -170,31 +169,21 @@ class CategorieProduit:
             endroit dans lequel on enregistre les catégories
         """
 
-        if not (isinstance(adresse, str) or adresse is None):
-            raise TypeError("adresse est de type str")
-
-        if not os.path.exists(self.adresse_fichier):
-            raise ValueError("l'adresse fournie n'existe pas")
-
-        if adresse is not None:
-            self.adresse_fichier = adresse
-
-        if not os.path.exists(self.adresse_fichier + "base_categorie.pkl"):
+        if not os.path.exists("donnees/base_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = dict()
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier +
-                      "base_categorie.pkl", "rb") as file:
+            with open("donnees/base_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
         database_fichier.update({self._nom: self})
 
-        with open(self.adresse_fichier + "base_categorie.pkl", "wb") as file:
+        with open("donnees/base_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
 
-    def EnregistrementIndicesCategorieProduit(self, adresse="donnees/"):
+    def EnregistrementIndicesCategorieProduit(self):
         """
         Fonction qui enregistre les indice des catégories dans l'endroit
         indiqué
@@ -205,28 +194,16 @@ class CategorieProduit:
             endroit dans lequel on enregistre les indices des catégories
         """
 
-        if not (isinstance(adresse, str) or adresse is None):
-            raise TypeError("adresse est de type str")
-
-        if not os.path.exists(self.adresse_fichier):
-            raise ValueError("l'adresse fournie n'existe pas")
-
-        if adresse is not None:
-            self.adresse_fichier = adresse
-
-        if not os.path.exists(self.adresse_fichier +
-                              "base_indice_categorie.pkl"):
+        if not os.path.exists("donnees/base_indice_categorie.pkl"):
             # Cree un dictionnaire vide si le fichier n'existe pas
             database_fichier = {}
 
         else:
             # Ouvre la BDD
-            with open(self.adresse_fichier +
-                      "base_indice_categorie.pkl", "rb") as file:
+            with open("donnees/base_indice_categorie.pkl", "rb") as file:
                 database_fichier = pickle.load(file)
 
         database_fichier.update({self._nom: self.indices})
 
-        with open(self.adresse_fichier +
-                  "base_indice_categorie.pkl", "wb") as file:
+        with open("donnees/base_indice_categorie.pkl", "wb") as file:
             pickle.dump(database_fichier, file)
