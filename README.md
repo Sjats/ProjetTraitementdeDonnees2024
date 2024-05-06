@@ -1,4 +1,4 @@
-# ProjetTraitementdeDonnees2024
+# Projet Traitement de Données2024
 
 ## Description
 Cette application permet à l'administrateur de faire du web scraping et aux utilisateurs sans droits de visualiser les données issues du web scraping sous forme d'histogramme ou de carte.
@@ -31,5 +31,9 @@ Si le module pipreqs n'est pas installé, veuillez exécuter la commande suivant
 pip install pipreqs
 pip install pip-tools
 ```
+## Collaborateurs
+Vinclair Marius \
+Yvernault-Collet Clément \
+Guàrdia Sanz Antoni
 
 [def]: \ProjetTraitementdeDonnees2024\diagramme_uml\uml.png?raw=true "uml"
