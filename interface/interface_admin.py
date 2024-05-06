@@ -333,8 +333,10 @@ class InterfaceAdmin:
             dictionnaires
             contenant les indices des catégories de produits pour ce pays.
         """
-        with open("donnees/base_categoire.pkl", "rb") as file:
+
+        with open("donnees/base_categorie.pkl", "rb") as file:
             categories = pickle.load(file)
+
         Pays = self.__pays
         indicecat = dict()
         for pays in Pays:
