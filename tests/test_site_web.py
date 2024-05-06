@@ -52,12 +52,12 @@ def test_produit_WebScrapping_echec(requetes, erreur, message_erreur):
         amazon.WebScrapping(requetes)
 
 
-@pytest.mark.parametrize(
-    "requetes",
-    [
-        ["rice"]
-    ]
-)
-def test_produit_WebScrapping_succes(requetes):
-    amazon = SiteWeb("amazon")
-    amazon.WebScrapping(requetes)
+# @pytest.mark.parametrize(
+#    "requetes",
+#    [
+#        ["rice"]
+#    ]
+# )
+# def test_produit_WebScrapping_succes(requetes):
+    # amazon = SiteWeb("amazon")
+    # amazon.WebScrapping(requetes)

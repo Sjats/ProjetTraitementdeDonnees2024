@@ -87,13 +87,14 @@ def bread_kwargs(article3_kwargs, article4_kwargs):
     }
 
 
-# Stations
+# Categories
+
 @pytest.fixture
 def categorie_kwargs(coffe_maker_kwargs, bread_kwargs):
     return {
         "nom": "cat",
-        "produits": {coffe_maker_kwargs._nom: Produit(**coffe_maker_kwargs),
-                     bread_kwargs._nom: Produit(**bread_kwargs)}
+        "produits": {coffe_maker_kwargs["nom"]: Produit(**coffe_maker_kwargs),
+                     bread_kwargs["nom"]: Produit(**bread_kwargs)}
     }
 
 # Configuration globale

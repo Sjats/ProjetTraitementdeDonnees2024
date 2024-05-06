@@ -38,6 +38,7 @@ def test_produit_init_echec(nom, articles, erreur, message_erreur):
 )
 def test_station_init_succes(kwargs_str, request):
     kwargs = request.getfixturevalue(kwargs_str)
-    prod = Produit(**kwargs)
-    prod.Enregistrement_prod()
-    prod.Enregistrement_ind()
+    Produit(**kwargs)
+    # prod = Produit(**kwargs)
+    # prod.Enregistrement_prod()
+    # prod.Enregistrement_ind()

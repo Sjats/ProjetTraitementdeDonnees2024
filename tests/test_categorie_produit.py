@@ -1,51 +1,40 @@
 import pytest
 import re
 from classes.categorie_produit import CategorieProduit
-from classes.produit import Produit
-from classes.article import Article
-from classes.prix import Prix
 
 
 @pytest.mark.parametrize(
-    'categorie', 'erreur', 'message_erreur',
+    'kwargs, erreur, message_erreur',
     [
-        (CategorieProduit(
-            ['Electroménager'],
-            {'coffee_maker':
-             Produit('coffee_maker',
-                     {'coffee_maker1': Article('France/Coffee+maker/0',
-                                               Prix(30, 'EUR'),
-                                               'France')})}),
+        ({"nom": ["electromenager"]},
          TypeError, "Le nom doit être une instance de str."),
 
-        (CategorieProduit(
-            'Electroménager',
-            Produit(['coffee_maker'],
-                    {'coffee_maker1': Article('France/Coffee+maker/0',
-                                              Prix(30, 'EUR'),
-                                              'France')})),
+        ({"produits": [pytest.bread, pytest.coffe_maker]},
          TypeError, (
              "Les produits doivent être une instance de dictionnaire."
              )),
 
-        (CategorieProduit(
-            'Electroménager',
-            {1: Produit('coffee_maker',
-                        {'coffee_maker1': Article('France/Coffee+maker/0',
-                                                  Prix(30, 'EUR'),
-                                                  'France')})}),
+        ({"produits": {1: pytest.bread, 2: pytest.coffe_maker}},
          TypeError, (
              "Les clés du dictionnaire de produits doivent être une "
              "instance de str."
              )),
-
-        (CategorieProduit(
-            'Electroménager',
-            {'coffee_maker':
-             Article('France/Coffee+maker/0', Prix(30, 'EUR'), 'France')}),
-         TypeError, "Le nom doit être une instance de str.")
      ]
 )
-def test_categorie_init_echec(categorie, erreur, message_erreur):
+def test_categorie_init_echec(categorie_kwargs, kwargs,
+                              erreur, message_erreur):
+    categorie_kwargs.update(kwargs)
     with pytest.raises(erreur, match=re.escape(message_erreur)):
-        categorie
+        CategorieProduit(**categorie_kwargs)
+
+
+@pytest.mark.parametrize(
+    "kwargs_str",
+    [
+
+        "categorie_kwargs"
+    ]
+)
+def test_categorie_init_succes(kwargs_str, request):
+    kwargs = request.getfixturevalue(kwargs_str)
+    CategorieProduit(**kwargs)

@@ -2,7 +2,7 @@ import pytest
 import re
 from classes.affichages_donnee import AffichageDonnees
 
-# test pour le init
+
 @pytest.mark.parametrize(
     'kwargs, erreur, message_erreur',
     [
