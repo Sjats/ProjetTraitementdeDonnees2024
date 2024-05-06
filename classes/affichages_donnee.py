@@ -104,10 +104,14 @@ class AffichageDonnees:
             ax.bar(mon_dict.keys(), indices, color='skyblue')
             ax.set_xlabel('Pays')
             ax.set_ylabel("Valeur de l'indice")
-            ax.set_title("Histogramme pour la catégorie "
+            if sur_quoi:
+                ax.set_title("Histogramme pour le produit "
                          f"'{categorie_ou_produit_selectionnee}' pour "
                          f"l'indice {index_selectionne}")
-
+            if not sur_quoi:
+                ax.set_title("Histogramme pour la catégorie "
+                         f"'{categorie_ou_produit_selectionnee}' pour "
+                         f"l'indice {index_selectionne}")
             ax.yaxis.grid(True)
             plt.xticks(rotation=90)
             plt.tight_layout()
