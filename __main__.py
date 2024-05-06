@@ -2,6 +2,7 @@ from interface.interface_admin import InterfaceAdmin
 from interface.interface_sd import InterfaceSd
 
 
+# Exemple d'utilisation des interfaces
 if __name__ == "__main__":
     print("Utilisateur : ")
     utilisateur = str(input())
