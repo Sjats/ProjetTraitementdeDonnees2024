@@ -13,7 +13,7 @@ class InterfaceAdmin:
     def __init__(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(etoiles)
-        print("Bienvenu dans la section admin")
+        print("Bienvenu sur l'interface admin")
         print(etoiles)
         self.main_menu()
 
@@ -145,6 +145,8 @@ class InterfaceAdmin:
                 self.lancer_web_scraping()
 
             if keyboard.is_pressed("4"):
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print("Actualisation en Cours...")
                 self.update_indices_prod()
                 self.update_indices_cat()
                 os.system('cls' if os.name == 'nt' else 'clear')
