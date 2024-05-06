@@ -1,7 +1,6 @@
 from scrapingbee import ScrapingBeeClient
 from .article import Article
 import requests
-import os
 import pickle
 from .prix import Prix
 from fonctions.domaine_a_devise import DomaineDevise
