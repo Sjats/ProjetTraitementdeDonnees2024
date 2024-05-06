@@ -65,5 +65,5 @@ def test_produit_init_succes(indices_produits, indices_categories,):
 
 def test_plot_histo_bool_echec(kwargs, erreur, message_erreur):
     with pytest.raises(erreur, match=re.escape(message_erreur)):
-        interface = InterfaceUtilisateur({}, {})
+        interface = AffichageDonnees({}, {})
         interface.plot_histogramme(**kwargs)
