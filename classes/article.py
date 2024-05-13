@@ -29,6 +29,11 @@ class Article:
         self._pays = pays
 
     def __str__(self):
-        text = ("Id Article : {}\nPrix : {}\nPays : {}"
+        text = ("Id Article : {}; \nPrix : {};\nPays : {}"
+                .format(self._id_article, self._prix, self._pays))
+        return (text)
+
+    def __repr__(self) -> str:
+        text = ("(Id Article : {} , Prix : {} , Pays : {})\n"
                 .format(self._id_article, self._prix, self._pays))
         return (text)
